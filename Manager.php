@@ -11,5 +11,9 @@ include "util.php";
 
 include "vendor/autoload.php";
 
+// todo: batch $pagesToFetch to push to DB somehow.
+$pagesToFetch = 50;
+
 $dataFetcher = new DataFetcher();
-$dataFetcher->fetch();
+
+$dataFetcher->fetch($pagesToFetch);
