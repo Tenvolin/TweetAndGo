@@ -16,7 +16,7 @@ class DataFetcher
   }
 
   /**
-   * @param $pagesToFetch
+   * @param $pagesToFetch int
    * @return array
    */
   function fetch($pagesToFetch)

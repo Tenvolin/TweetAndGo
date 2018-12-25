@@ -31,6 +31,12 @@ foreach ($accountTweets as $tweetBundle) {
     $tweetEntity = new Tweet($tweetId);
     $tweetEntity->setMessage($msg);
     $tweetEntity->setDate($date);
+
+    $entityManager->persist($tweetEntity);
+    $entityManager->flush();
   }
+
+  // todo: hold onto list of entities, check if each entity exists in the DB before insertion.
+  //  Check against DB to see if there are any results that have the exact same tweetId.
 }
 

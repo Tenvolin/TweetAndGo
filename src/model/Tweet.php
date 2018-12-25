@@ -8,7 +8,7 @@
 
 /**
  * @Entity
- * @table(name="tweets")
+ * @table(name="tweets", options={"collate":"utf8mb4_general_ci", "charset":"utf8mb4"})
  **/
 class Tweet
 {
