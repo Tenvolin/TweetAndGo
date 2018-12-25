@@ -45,7 +45,7 @@ class DataFetcher
 
       // fetch
       curl_setopt($ch, CURLOPT_URL, $link);
-      usleep(rand(1000000,3000000));
+      usleep(rand(1000000, 1500000));
       $output = curl_exec($ch);
 
       // Parse a page of tweets from mobile link.

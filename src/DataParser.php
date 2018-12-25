@@ -20,6 +20,7 @@ class DataParser
   // Always call this method before parsing.
   public function loadHtmlStr($htmlStr) {
     $this->document->loadHtml($htmlStr);
+
     $result = $this->document->find('*[rel=canonical]');
     if (count($result) <= 0 ) {
       throw new \http\Exception\RuntimeException("Something went wrong!!!");

@@ -29,3 +29,18 @@ function nextChar($string, &$pointer){
     return $str;
   }
 }
+
+function convertTwitterDateToDateTime($abbreviatedDate) {
+  try {
+    $currentTime = new DateTime();
+
+
+
+
+  } catch(Exception $e) {
+    Throw new \http\Exception\RuntimeException("Problem when determining date and time: $e");
+  }
+
+
+
+}
