@@ -14,10 +14,16 @@ class Tweet
 {
   /** @Id @Column(type="bigint") @GeneratedValue **/
   protected $id;
+  /** @Column(type="string", unique=true) @GeneratedValue **/
+  protected $tweetId;
   /** @Column(type="string") @GeneratedValue **/
   protected $message;
   /** @Column(type="datetime") @GeneratedValue **/
   protected $date;
+
+  public function __construct($tweetId) {
+    $this->tweetId = $tweetId;
+  }
 
   /**
    * @return mixed

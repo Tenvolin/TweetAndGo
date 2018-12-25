@@ -45,9 +45,10 @@ class DataParser
   foreach ($tables as $e) {
     $timestamp = $this->parseTweetMessage($e);
     $text =  $this->parseContainerTimestamp($e);
+    $tweetId = $this->parseTweetId($e);
 
     array_push($tweets,
-      [$timestamp , $text]);
+      [$timestamp , $text, $tweetId]);
   }
   return $tweets;
   }
@@ -91,7 +92,7 @@ class DataParser
    * Given a table node, extract timestamp.
    * todo: pull and make use of link that actually extracts timestamp; this timestamp is not exact.
    * @param $tweetTableNode
-   * @return string
+   * @return string|null
    */
   private static function parseContainerTimestamp($tweetTableNode) {
     $result = $tweetTableNode->find("td.timestamp");
@@ -101,6 +102,27 @@ class DataParser
     $eTimestamp = $result[0];
     $timestamp = trim($eTimestamp->text());
     return $timestamp;
+  }
+
+  /**
+   * @param $tweetTableNode
+   * @return string|null
+   */
+  private static function parseTweetId($tweetTableNode) {
+    $resultStr = $tweetTableNode->getAttribute('href');
+    if (mb_strlen($resultStr) <= 0) {
+      return null;
+    }
+
+    $tweetId = trim($resultStr);
+    $tweetId = preg_replace("/[^0-9]/", '', $tweetId);
+
+    if (is_null($tweetId) || is_array($tweetId))
+    {
+      return null;
+    }
+
+    return $tweetId;
   }
 
 }

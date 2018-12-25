@@ -9,9 +9,14 @@ include_once "../bootstrap.php";
 include_once "DataParser.php";
 include_once "DataFetcher.php";
 include_once "util.php";
+include_once "model/Tweet.php";
 //require_once "../vendor/autoload.php";
 // todo: batch $pagesToFetch to push to DB somehow.
-$pagesToFetch = 50;
+
+// string manipulation config.
+mb_internal_encoding("UTF-8");
+
+$pagesToFetch = 3;
 
 $dataFetcher = new DataFetcher();
 
@@ -19,15 +24,13 @@ $accountTweets = $dataFetcher->fetch($pagesToFetch); // array of array
 
 foreach ($accountTweets as $tweetBundle) {
   foreach($tweetBundle as $tweet) {
-    $tweetEnt = new Tweet();
+    $msg = $tweet[0];
+    $date = Util::convertUnformattedTwitterDateToDateTime($tweet[1]);
+    $tweetId = $tweet[2];
 
-    $date = $tweet[1];
-
-
-    $tweetEnt->setMessage($tweet[0]);
-
-
-
+    $tweetEntity = new Tweet($tweetId);
+    $tweetEntity->setMessage($msg);
+    $tweetEntity->setDate($date);
   }
 }
 
