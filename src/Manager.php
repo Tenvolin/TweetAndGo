@@ -10,33 +10,15 @@ include_once "DataParser.php";
 include_once "DataFetcher.php";
 include_once "util.php";
 include_once "model/Tweet.php";
+include_once "ParseException.php";
 //require_once "../vendor/autoload.php";
 // todo: batch $pagesToFetch to push to DB somehow.
 
 // string manipulation config.
 mb_internal_encoding("UTF-8");
-
-$pagesToFetch = 3;
-
+$pagesToFetch = 1;
 $dataFetcher = new DataFetcher();
 
-$accountTweets = $dataFetcher->fetch($pagesToFetch); // array of array
-
-foreach ($accountTweets as $tweetBundle) {
-  foreach($tweetBundle as $tweet) {
-    $msg = $tweet[0];
-    $date = Util::convertUnformattedTwitterDateToDateTime($tweet[1]);
-    $tweetId = $tweet[2];
-
-    $tweetEntity = new Tweet($tweetId);
-    $tweetEntity->setMessage($msg);
-    $tweetEntity->setDate($date);
-
-    $entityManager->persist($tweetEntity);
-    $entityManager->flush();
-  }
-
-  // todo: hold onto list of entities, check if each entity exists in the DB before insertion.
-  //  Check against DB to see if there are any results that have the exact same tweetId.
-}
+$accountTweets = $dataFetcher->fetchAndParse($pagesToFetch); // array of array
+DataPusher::push($accountTweets, $entityManager);
 

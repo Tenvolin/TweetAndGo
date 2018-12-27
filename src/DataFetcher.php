@@ -19,7 +19,7 @@ class DataFetcher
    * @param $pagesToFetch int
    * @return array
    */
-  function fetch($pagesToFetch)
+  function fetchAndParse($pagesToFetch)
   {
     $time_pre = microtime(true);
     if ($pagesToFetch <= 0) {
@@ -61,7 +61,7 @@ class DataFetcher
     }
     $time_post = microtime(true);
     $exact_time = $time_post - $time_pre;
-    print($exact_time);
+    print($exact_time); // todo: use debug parameter to display this information.
     curl_close($ch);
     return $arrayOfPages;
   }

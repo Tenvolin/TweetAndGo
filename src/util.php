@@ -12,6 +12,7 @@ class Util {
   const TIME_FORMAT_WITHIN_SECONDS = 1;
   const TIME_FORMAT_WITHIN_MINUTES = 2;
   const TIME_FORMAT_WITHIN_HOURS = 3;
+  const TIME_FORMAT_WITHIN_DAYS = 3;
   const TIME_FORMAT_WITHIN_MONTH = 4;
   const TIME_FORMAT_BEYOND_YEAR = 5;
 
@@ -50,6 +51,7 @@ class Util {
     // abbreviated date will be of the following form:
     // Not going to store exact times, as that's going to require many more http requests, which may result in banning.
     // | "dec 21" - This tweet took place on this day.
+    // | "2d" - 2 days old.
     // | "2h" - 2 hours old.
     // | "2m" - 2 mins old.
     // | "2s" - 2 secs old.
@@ -60,18 +62,24 @@ class Util {
       $durationToSubtract = "P";
       $tweetDateTime = null;
 
-      if ($courseOfAction === self::TIME_FORMAT_WITHIN_HOURS) {
-        $currentDateTime = new DateTime();
-//        $number = self::findNumber($abbreviatedDate);
+      // differentiate between different time formats Twitter provides.
+      if ($courseOfAction === self::TIME_FORMAT_WITHIN_HOURS ||
+          $courseOfAction === self::TIME_FORMAT_WITHIN_MINUTES ||
+          $courseOfAction === self::TIME_FORMAT_WITHIN_SECONDS) {
 
+        $currentDateTime = new DateTime();
         $durationToSubtract.= mb_convert_case($abbreviatedDate, MB_CASE_UPPER, "UTF-8");
         $dateInterval = new DateInterval($durationToSubtract);
         $tweetDateTime = $currentDateTime->sub($dateInterval);
-      } else if ( $courseOfAction === self::TIME_FORMAT_WITHIN_MONTH ||
-                  $courseOfAction === self::TIME_FORMAT_WITHIN_HOURS) {
+
+      } else if ( $courseOfAction === self::TIME_FORMAT_WITHIN_DAYS ||
+                  $courseOfAction === self::TIME_FORMAT_WITHIN_MONTH ||
+                  $courseOfAction === self::TIME_FORMAT_BEYOND_YEAR) {
         $tweetDateTime = new DateTime($abbreviatedDate);
       }
 
+
+       // todo: handle this scenario better?
       if (is_null($tweetDateTime)) {
         throw new Exception("Date format not understood ($abbreviatedDate)");
       }
@@ -79,7 +87,7 @@ class Util {
       return $tweetDateTime;
 
     } catch(Exception $e) {
-      Throw new \http\Exception\RuntimeException("Problem when determining date and time: $e");
+      Throw new RuntimeException("Problem when determining date and time: $e");
     }
 
   }
@@ -110,32 +118,5 @@ class Util {
     return $case;
   }
 
-//  /**
-//   * @param $abbreviatedDate
-//   * @return string
-//   */
-//  private static function findNumber($abbreviatedDate) {
-//    $charsArray = preg_split('//u', $abbreviatedDate, null, PREG_SPLIT_NO_EMPTY);
-//    $lastIndex = count($charsArray) - 1;
-//
-//    $numStr = "";
-//    for ($i = 0; $i < $lastIndex; $i++) {
-//      $numStr .= $charsArray[$i];
-//    }
-//
-//    return $numStr;
-//  }
-//
-//  private static function findNumber($abbreviatedDate) {
-//    $charsArray = preg_split('//u', $abbreviatedDate, null, PREG_SPLIT_NO_EMPTY);
-//    $lastIndex = count($charsArray) - 1;
-//
-//    $numStr = "";
-//    for ($i = 0; $i < $lastIndex; $i++) {
-//      $numStr .= $charsArray[$i];
-//    }
-//
-//    return $numStr;
-//  }
 }
 

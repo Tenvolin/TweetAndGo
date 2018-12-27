@@ -14,15 +14,53 @@ class Tweet
 {
   /** @Id @Column(type="bigint") @GeneratedValue **/
   protected $id;
-  /** @Column(type="string", unique=true) @GeneratedValue **/
+  /** @Column(type="string") unique=true **/
+  protected $author;
+  /** @Column(type="string", unique=true) **/
   protected $tweetId;
-  /** @Column(type="string") @GeneratedValue **/
+  /** @Column(type="string", length=1120) **/
   protected $message;
-  /** @Column(type="datetime") @GeneratedValue **/
+  /** @Column(type="datetime") **/
   protected $date;
 
-  public function __construct($tweetId) {
+
+  public function __construct($author, $tweetId, $message, $date) {
+    $this->author = $author;
     $this->tweetId = $tweetId;
+    $this->message = $message;
+    $this->date = $date;
+  }
+
+  /**
+   * @return mixed
+   */
+  public function getTweetId()
+  {
+    return $this->tweetId;
+  }
+
+  /**
+   * @param mixed $tweetId
+   */
+  public function setTweetId($tweetId): void
+  {
+    $this->tweetId = $tweetId;
+  }
+
+  /**
+   * @return mixed
+   */
+  public function getAuthor()
+  {
+    return $this->author;
+  }
+
+  /**
+   * @param mixed $author
+   */
+  public function setAuthor($author): void
+  {
+    $this->author = $author;
   }
 
   /**
@@ -41,10 +79,6 @@ class Tweet
     $this->date = $date;
   }
 
-  public function getId() {
-    return $this->id;
-  }
-
   public function getMessage() {
     return $this->message;
   }
@@ -53,6 +87,9 @@ class Tweet
     $this->message = $msg;
   }
 
+  public function getId() {
+    return $this->id;
+  }
 
 
 }

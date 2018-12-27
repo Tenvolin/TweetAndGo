@@ -16,16 +16,23 @@ class DataParser
     $this->document = new Document();
   }
 
-  // purpose: to load DOM for parsing.
+  // purpose: Instantiate DOM object and find canonical link.
   // Always call this method before parsing.
+  // todo: Extract out a parseCanonicalLink() method; and
+  //  consider creating a factory class for loading up our loadHTMLdoc.
   public function loadHtmlStr($htmlStr) {
     $this->document->loadHtml($htmlStr);
 
     $result = $this->document->find('*[rel=canonical]');
     if (count($result) <= 0 ) {
-      throw new \http\Exception\RuntimeException("Something went wrong!!!");
+      throw new ParseException("Unable to parse author name.");
     }
-    $this->canonicalLink = $result[0]->getAttribute('href');
+
+    $canonicalLink = $result[0]->getAttribute('href');
+    if (is_null($canonicalLink)) {
+      throw new ParseException("Unable to parse canonical link.");
+    }
+    $this->canonicalLink = $canonicalLink;
   }
 
   /**
@@ -37,18 +44,19 @@ class DataParser
   public function parseTweetsAndFeatures() {
   // Parse out all tables
   $document = $this->document;
-  $tables = $document->find("table.tweet");
+  $tables = $document->find("table.tweet"); // todo: refactor this and other find-calls to throw exception
+  $author = $this->parseAuthor($document);
 
   // generate an array that contains fields to push into DB.
   $tweets = [];
 
   foreach ($tables as $e) {
-    $timestamp = $this->parseTweetMessage($e);
-    $text =  $this->parseContainerTimestamp($e);
     $tweetId = $this->parseTweetId($e);
+    $text = $this->parseTweetMessage($e);
+    $timestamp =  $this->parseContainerTimestamp($e);
 
     array_push($tweets,
-      [$timestamp , $text, $tweetId]);
+      [$author, $tweetId, $text, $timestamp]);
   }
   return $tweets;
   }
@@ -90,7 +98,7 @@ class DataParser
 
   /**
    * Given a table node, extract timestamp.
-   * todo: pull and make use of link that actually extracts timestamp; this timestamp is not exact.
+   * todo: feature - pull and make use of link that actually extracts timestamp; this timestamp is not exact.
    * @param $tweetTableNode
    * @return string|null
    */
@@ -108,7 +116,7 @@ class DataParser
    * @param $tweetTableNode
    * @return string|null
    */
-  private static function parseTweetId($tweetTableNode) {
+  private function parseTweetId($tweetTableNode) {
     $resultStr = $tweetTableNode->getAttribute('href');
     if (mb_strlen($resultStr) <= 0) {
       return null;
@@ -123,6 +131,27 @@ class DataParser
     }
 
     return $tweetId;
+  }
+
+  /**
+   * @param $e
+   * @return string|null
+   */
+  private function parseAuthor($document) {
+    $result = $document->find("div.profile .screen-name");
+    if (count($result) <= 0) {
+      return null;
+    }
+    $eAuthor = $result[0];
+
+    $author = trim($eAuthor->text());
+
+    if (is_null($author))
+    {
+      return null;
+    }
+
+    return $author;
   }
 
 }
