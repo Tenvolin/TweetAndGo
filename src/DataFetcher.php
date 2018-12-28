@@ -17,9 +17,10 @@ class DataFetcher
 
   /**
    * @param $pagesToFetch int
+   * @param $accountName string
    * @return array
    */
-  function fetchAndParse($pagesToFetch)
+  public function fetchAndParse($pagesToFetch, $accountName)
   {
     $time_pre = microtime(true);
     if ($pagesToFetch <= 0) {
@@ -27,7 +28,7 @@ class DataFetcher
     }
 
     $certificatePath = "C:/development/php-7.3.0-nts-Win32-VC15-x64/certs/cacert.pem";
-    $link = "https://mobile.twitter.com/miraieu";
+    $link = "https://mobile.twitter.com/$accountName";
 
     // Set up fetching configuration
     $ch = curl_init();
