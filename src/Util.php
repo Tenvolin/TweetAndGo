@@ -162,5 +162,25 @@ class Util {
     return $tweetCount;
   }
 
+  /**
+   * todo: determine if method is robust; not sure if l1 or l2 needs to be longer.
+   * @param $list1 Tweet[]
+   * @param $list2 Tweet[]
+   * @return array
+   */
+  public static function filterOutsideEntities($list1, $list2)
+  {
+    $result = [];
+    foreach ($list1 as $e1) {
+      foreach ($list2 as $e2) {
+        if ($e1->getTweetId() === $e2->getTweetId())
+          return $result;
+      }
+
+      array_push($result, $e1);
+    }
+
+    return $result;
+  }
 }
 

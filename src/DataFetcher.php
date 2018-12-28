@@ -11,59 +11,77 @@
 
 class DataFetcher
 {
-  function __construct() {
+  private $ch;
+  private $certificatePath;
+  private $baseLink = 'https://mobile.twitter.com/';
 
+  function __construct()
+  {
+    $this->ch = curl_init();
+    $this->certificatePath = "C:/development/php-7.3.0-nts-Win32-VC15-x64/certs/cacert.pem";
+
+    curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($this->ch, CURLOPT_TIMEOUT, 5);
+    curl_setopt($this->ch, CURLOPT_CAINFO, $this->certificatePath);
   }
 
   /**
-   * @param $pagesToFetch int
-   * @param $accountName string
-   * @return array
+   * Gets html data from link or an account's first page of tweets.
+   * Fetching is delayed for a couple seconds to prevent spamming.
+   * INVARIANT: $link is empty or the next page link of an account.
+   * @param $accountName
+   * @param string $link
+   * @return string
    */
-  public function fetchAndParse($pagesToFetch, $accountName)
+  public function delayedFetch($accountName, $link = "")
   {
-    $time_pre = microtime(true);
-    if ($pagesToFetch <= 0) {
-      return [];
-    }
+    usleep(rand(1000000, 1500000));
 
-    $certificatePath = "C:/development/php-7.3.0-nts-Win32-VC15-x64/certs/cacert.pem";
-    $link = "https://mobile.twitter.com/$accountName";
+    if (mb_strlen($link, "UTF-8") <= 0)
+      $link = $this->baseLink . $accountName;
 
     // Set up fetching configuration
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    curl_setopt($ch, CURLOPT_TIMEOUT, 5);
-    curl_setopt($ch, CURLOPT_CAINFO, $certificatePath);
+    $ch = $this->ch;
+    curl_setopt($ch, CURLOPT_URL, $link);
 
     // fetch $pagesToFetch page, holding on to all info.
-    $dataParser = new DataParser();
-    $arrayOfPages = [];
-    for ($i = 0; $i < $pagesToFetch; $i++) {
-      if (mb_strlen($link, "utf-8") <= 0) {
-        break;
-      }
+    $result = curl_exec($ch);
+    if ($result === false)
+      return '';
 
-      // fetch
-      curl_setopt($ch, CURLOPT_URL, $link);
-      usleep(rand(1000000, 1500000));
-      $output = curl_exec($ch);
+    return $result;
+  }
 
-      // Parse a page of tweets from mobile link.
-      $dataParser->loadHtmlStr($output);
-      $onePageOfTweets = $dataParser->parseTweetsAndFeatures();
-      if (is_null($onePageOfTweets))
-        break;
-      $link = $dataParser->parseNextPageLink();
-      if (is_null($link))
-        break;
-
-      array_push($arrayOfPages, $onePageOfTweets);
-    }
-    $time_post = microtime(true);
-    $exact_time = $time_post - $time_pre;
-    print($exact_time); // todo: use debug parameter to display this information.
-    curl_close($ch);
-    return $arrayOfPages;
+  public function close()
+  {
+    curl_close($this->ch);
   }
 }
+//    $time_post = microtime(true);
+//    $exact_time = $time_post - $time_pre;
+//    print($exact_time); // todo: use debug parameter to display this information.
+
+
+//$dataParser = new DataParser();
+//$arrayOfPages = [];
+//for ($i = 0; $i < $pagesToFetch; $i++) {
+//  if (mb_strlen($link, "utf-8") <= 0) {
+//    break;
+//  }
+//
+//  // fetch
+//  curl_setopt($ch, CURLOPT_URL, $link);
+//  usleep(rand(1000000, 1500000));
+//
+//
+//  // Parse a page of tweets from mobile link.
+//  $dataParser->loadHtmlStr($output);
+//  $onePageOfTweets = $dataParser->parseTweetsAndFeatures();
+//  if (is_null($onePageOfTweets))
+//    break;
+//  $link = $dataParser->parseNextPageLink();
+//  if (is_null($link))
+//    break;
+//
+//  array_push($arrayOfPages, $onePageOfTweets);
+//}

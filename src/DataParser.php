@@ -7,6 +7,7 @@
  */
 use DiDom\Document;
 // todo: implement exceptions for calling parsing without loading htmlStr.
+// returns array or strings.
 class DataParser
 {
   private $document;
@@ -16,10 +17,13 @@ class DataParser
     $this->document = new Document();
   }
 
-  // purpose: Instantiate DOM object and find canonical link.
-  // Always call this method before parsing.
   // todo: Extract out a parseCanonicalLink() method; and
   //  consider creating a factory class for loading up our loadHTMLdoc.
+  /**
+   * purpose: Instantiate DOM object and find canonical link.
+   * Always call this method before parsing.
+   * @param $htmlStr
+   */
   public function loadHtmlStr($htmlStr) {
     $this->document->loadHtml($htmlStr);
 
@@ -37,9 +41,9 @@ class DataParser
 
   /**
    * Parse contents of mobile twitter account page.
-   * Returns a 2-d array; An array of tweets, where every tweet can contain n features.
+   * Returns an array of tweets, where every tweet can contain n features.
    * Features: tweetText, timestamp.
-   * @return array;
+   * @return Tweet[];
    */
   public function parseTweetsAndFeatures() {
   // Parse out all tables
@@ -48,24 +52,24 @@ class DataParser
   $author = $this->parseAuthor($document);
 
   // generate an array that contains fields to push into DB.
-  $tweets = [];
+  $tweetArray = [];
 
   foreach ($tables as $e) {
     $tweetId = $this->parseTweetId($e);
-    $text = $this->parseTweetMessage($e);
-    $timestamp =  $this->parseContainerTimestamp($e);
+    $message = $this->parseTweetMessage($e);
+    $timestamp =  Util::convertUnformattedTwitterDateToDateTime($this->parseContainerTimestamp($e));
 
-    array_push($tweets,
-      [$author, $tweetId, $text, $timestamp]);
+    $tweet = new Tweet($author, $tweetId, $message, $timestamp);
+    array_push($tweetArray, $tweet);
   }
-  return $tweets;
+  return $tweetArray;
   }
 
   public function parseNextPageLink() {
     $document = $this->document;
     $results = $document->find("div.w-button-more>a");
     if (count($results) <= 0) {
-      return null;
+      return '';
     }
     $eNextButton = $results[0];
 
@@ -89,7 +93,7 @@ class DataParser
   private function parseTweetMessage($tweetTableNode) {
     $result = $tweetTableNode->find("div.tweet-text");
     if (count($result) <= 0) {
-      return null;
+      return '';
     }
     $eMessage = $result[0];
     $message = trim($eMessage->text());
@@ -100,12 +104,12 @@ class DataParser
    * Given a table node, extract timestamp.
    * todo: feature - pull and make use of link that actually extracts timestamp; this timestamp is not exact.
    * @param $tweetTableNode
-   * @return string|null
+   * @return string
    */
   private static function parseContainerTimestamp($tweetTableNode) {
     $result = $tweetTableNode->find("td.timestamp");
     if (count($result) <= 0) {
-      return null;
+      return '';
     }
     $eTimestamp = $result[0];
     $timestamp = trim($eTimestamp->text());
@@ -114,12 +118,12 @@ class DataParser
 
   /**
    * @param $tweetTableNode
-   * @return string|null
+   * @return string
    */
   private function parseTweetId($tweetTableNode) {
     $resultStr = $tweetTableNode->getAttribute('href');
     if (mb_strlen($resultStr) <= 0) {
-      return null;
+      return '';
     }
 
     $tweetId = trim($resultStr);
@@ -127,20 +131,20 @@ class DataParser
 
     if (is_null($tweetId) || is_array($tweetId))
     {
-      return null;
+      return '';
     }
 
     return $tweetId;
   }
 
   /**
-   * @param $e
-   * @return string|null
+   * @param $document
+   * @return string
    */
   private function parseAuthor($document) {
     $result = $document->find("div.profile .screen-name");
     if (count($result) <= 0) {
-      return null;
+      return '';
     }
     $eAuthor = $result[0];
 
@@ -148,7 +152,7 @@ class DataParser
 
     if (is_null($author))
     {
-      return null;
+      return '';
     }
 
     return $author;
