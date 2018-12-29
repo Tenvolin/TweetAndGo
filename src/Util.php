@@ -164,11 +164,12 @@ class Util {
 
   /**
    * todo: determine if method is robust; not sure if l1 or l2 needs to be longer.
+   * todo: was a hashmap the better choice?
    * @param $list1 Tweet[]
    * @param $list2 Tweet[]
    * @return array
    */
-  public static function filterOutsideEntities($list1, $list2)
+  public static function filterExclusiveTweets($list1, $list2)
   {
     $result = [];
     foreach ($list1 as $e1) {
