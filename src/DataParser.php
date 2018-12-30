@@ -57,6 +57,7 @@ class DataParser
   foreach ($tables as $e) {
     $tweetId = $this->parseTweetId($e);
     $message = $this->parseTweetMessage($e);
+    // todo; datetime not as accurate as we'd like. Getting 1-day off errors._
     $timestamp =  Util::convertUnformattedTwitterDateToDateTime($this->parseContainerTimestamp($e));
 
     $tweet = new Tweet($author, $tweetId, $message, $timestamp);

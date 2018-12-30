@@ -56,32 +56,10 @@ class DataFetcher
   {
     curl_close($this->ch);
   }
+
+  public function getBaseLink()
+  {
+    return $this->baseLink;
+  }
 }
-//    $time_post = microtime(true);
-//    $exact_time = $time_post - $time_pre;
-//    print($exact_time); // todo: use debug parameter to display this information.
 
-
-//$dataParser = new DataParser();
-//$arrayOfPages = [];
-//for ($i = 0; $i < $pagesToFetch; $i++) {
-//  if (mb_strlen($link, "utf-8") <= 0) {
-//    break;
-//  }
-//
-//  // fetch
-//  curl_setopt($ch, CURLOPT_URL, $link);
-//  usleep(rand(1000000, 1500000));
-//
-//
-//  // Parse a page of tweets from mobile link.
-//  $dataParser->loadHtmlStr($output);
-//  $onePageOfTweets = $dataParser->parseTweetsAndFeatures();
-//  if (is_null($onePageOfTweets))
-//    break;
-//  $link = $dataParser->parseNextPageLink();
-//  if (is_null($link))
-//    break;
-//
-//  array_push($arrayOfPages, $onePageOfTweets);
-//}

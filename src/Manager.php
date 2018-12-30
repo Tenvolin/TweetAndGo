@@ -8,13 +8,12 @@
 include_once "../bootstrap.php";
 include_once "DataFetcher.php";
 include_once "DataParser.php";
-include_once "DataPusher.php";
+include_once "DataPersist.php";
 include_once "Util.php";
 include_once "model/Tweet.php";
 include_once "ParseException.php";
 
-use Doctrine\ORM\Tools\Setup;
-use Doctrine\ORM\EntityManager;
+
 // todo: batch $pagesToFetch to push to DB somehow.
 
 // Config and setup
@@ -34,7 +33,7 @@ if (count($argv) > 1) {
 // Determine query options
 if ($isDebugging) {
   $accountName = "realDonaldTrump";
-  $tweetCount = 40;
+  $tweetCount = 600;
 } else {
   $accountName = Util::promptForValidUsername();
   $tweetCount = Util::promptForValidTweetCount();
@@ -209,10 +208,3 @@ $dataPusher->fetchAndPersistTweets($accountName, $tweetCount);
 //    }
 //  }
 //}
-
-
-
-
-
-
-$dataParser->close();

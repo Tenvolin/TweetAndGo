@@ -73,10 +73,15 @@ class Util {
         $dateInterval = new DateInterval($durationToSubtract);
         $tweetDateTime = $currentDateTime->sub($dateInterval);
 
-      } else if ( $courseOfAction === self::TIME_FORMAT_WITHIN_DAYS ||
-                  $courseOfAction === self::TIME_FORMAT_WITHIN_MONTH ||
-                  $courseOfAction === self::TIME_FORMAT_BEYOND_YEAR) {
-        $tweetDateTime = new DateTime($abbreviatedDate);
+      } else if ( $courseOfAction === self::TIME_FORMAT_WITHIN_DAYS) {
+        $dateStr = intval($abbreviatedDate) . "days";
+        $tweetDateTime = new DateTime($dateStr);
+      } else if ($courseOfAction === self::TIME_FORMAT_WITHIN_MONTH ) {
+        $dateStr = intval($abbreviatedDate) . "months";
+        $tweetDateTime = new DateTime($dateStr);
+      } else if ($courseOfAction === self::TIME_FORMAT_BEYOND_YEAR) {
+        $dateStr = intval($abbreviatedDate) . "years";
+        $tweetDateTime = new DateTime($dateStr);
       }
 
 
