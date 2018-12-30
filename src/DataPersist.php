@@ -40,7 +40,6 @@ class DataPersist
       foreach ($tweetArray as $tweet) {
         $entityManager->persist($tweet);
       }
-
       $entityManager->flush();
       // todo: hold onto list of entities, check if each entity exists in the DB before insertion.
       //  Check against DB to see if there are any results that have the exact same tweetId.
@@ -220,7 +219,6 @@ class DataPersist
    * the last DB entry.
    * @param $accountName
    * @param $tweetsToFetch
-   * @param bool $persistFromEnd
    * @return array
    */
   private function pushPossibleTweets($accountName, $tweetsToFetch) {
@@ -229,7 +227,7 @@ class DataPersist
     //  That's the only logic we care about.
     $dataFetcher = $this->dataFetcher;
     $dataParser = $this->dataParser;
-    $entityManager = $this->entityManager;
+    $entityManager = &$this->entityManager;
     $conn = $this->conn;
     $config = $this->config;
 
@@ -245,20 +243,43 @@ class DataPersist
       $dataParser->loadHtmlStr($tweetsHtmlData);
       $tweetArray = $dataParser->parseTweetsAndFeatures(); // tuples; maybe generate array of Tweet entities?
 
-      try {
-        DataPersist::pushTweetArray($tweetArray, $entityManager);
-        $tweetsFetched += self::$TWEET_BATCH;
-      } catch (Exception $e) {
-        // EntityManager object closes; must recreate and begin fetching from database instead.
-        $insertExceptionFound = true;
+      // start refact
+      while (true) {
         try {
-          $this->entityManager = EntityManager::create($conn, $config);
+          DataPersist::pushTweetArray($tweetArray, $entityManager);
+          $tweetsFetched += count($tweetArray);
+          break;
         } catch (Exception $e) {
-          throw new RuntimeException("EntityManager instantiation error: $e");
+          $insertExceptionFound = true;
+          $offendingTweetId = ErrorParser::parseDuplicateMessageForTweetId($e->getMessage());
+
+          $tweetArray = ErrorParser::filterOutOffendingTweet($tweetArray, $offendingTweetId);
+          try {
+            $entityManager = EntityManager::create($conn, $config);
+          } catch (Exception $e) {
+            throw new RuntimeException("EntityManager instantiation error: $e");
+          }
         }
-        break;
       }
-      // !!! return $insertExceptionFound, $remainingTweetsRequired.
+      // end
+//      try {
+//        DataPersist::pushTweetArray($tweetArray, $entityManager);
+//        $tweetsFetched += count($tweetArray);
+//      } catch (\Doctrine\DBAL\Exception\UniqueConstraintViolationException $e) {
+//        // EntityManager object closes; must recreate and begin fetching from database instead.
+//        $insertExceptionFound = true;
+//        $offendingTweetId =
+//          ErrorParser::parseDuplicateMessageForTweetId($e->getMessage());
+//        // todo: on failure, parse error message for problematic id and filter it out from our tweetArray.
+//        //    Re-attempt.
+//
+//        $tweetArray = ErrorParser::filterOutOffendingTweet($tweetArray, $offendingTweetId);
+//        try {
+//          $this->entityManager = EntityManager::create($conn, $config);
+//        } catch (Exception $e) {
+//          throw new RuntimeException("EntityManager instantiation error: $e");
+//        }
+//      }
     }
 
     $results = [];
@@ -361,7 +382,6 @@ class DataPersist
         }
         break;
       }
-      // !!! return $insertExceptionFound, $remainingTweetsRequired.
     }
 
     $results = [];

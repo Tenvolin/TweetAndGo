@@ -12,7 +12,7 @@ include_once "DataPersist.php";
 include_once "Util.php";
 include_once "model/Tweet.php";
 include_once "ParseException.php";
-
+include_once "ErrorParser.php";
 
 // todo: batch $pagesToFetch to push to DB somehow.
 
@@ -32,7 +32,7 @@ if (count($argv) > 1) {
 
 // Determine query options
 if ($isDebugging) {
-  $accountName = "realDonaldTrump";
+  $accountName = "miraieu"; // miraieu
   $tweetCount = 600;
 } else {
   $accountName = Util::promptForValidUsername();
