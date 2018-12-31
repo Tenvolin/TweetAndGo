@@ -83,6 +83,10 @@ class DataParser
     // set up next mobile twitter link
     $absoluteNextPageLink = $this->canonicalLink . $restEndpointStr;
     $mobileAbsoluteNextPageLink = mb_ereg_replace('//', '//mobile.', $absoluteNextPageLink);
+
+    if (!is_null($GLOBALS['debug_logger'])) {
+      $GLOBALS['debug_logger']->log($mobileAbsoluteNextPageLink);
+    }
     return $mobileAbsoluteNextPageLink;
   }
 

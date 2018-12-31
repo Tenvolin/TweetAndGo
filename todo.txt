@@ -11,3 +11,5 @@ X - implement parsing of tweet type; distinguish between regular and retweet.
 - fix up name schemes to be more uniform based on layering.
 - add highlighted text imports.
 - add parseException throws in parser.
+- move code to a server.
+- Attempt to deploy code to droplet.

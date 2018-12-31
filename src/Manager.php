@@ -13,6 +13,7 @@ include_once "Util.php";
 include_once "model/Tweet.php";
 include_once "ParseException.php";
 include_once "ErrorParser.php";
+include_once "Logger.php";
 
 // todo: set up some unit testing.
 // todo: attempt to detect any memory leaks.
@@ -40,9 +41,12 @@ if ($isDebugging) {
   $accountName = Util::promptForValidUsername();
   $tweetCount = Util::promptForValidTweetCount();
 }
+$debug_logger = new Logger();
 
 // Fetch enough data to satisfy.
 //   public static function fetchAndPersistTweets($accountName, $tweetCount, $entityManager, $conn, $config) {
 $dataPusher = new DataPersist($entityManager, $conn, $config);
 $dataPusher->fetchAndPersistTweets($accountName, $tweetCount);
 
+
+$debug_logger->close();
