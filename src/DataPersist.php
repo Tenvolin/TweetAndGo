@@ -5,7 +5,6 @@
  * Date: 2018-12-26
  * Time: 5:36 PM
  */
-use Doctrine\ORM\Tools\Setup;
 use Doctrine\ORM\EntityManager;
 
 class DataPersist
@@ -32,18 +31,14 @@ class DataPersist
 
   /**
    * @param $tweetArray
-   * @param $entityManager EntityManager
    * @throws Exception
    */
   public function pushTweetArray($tweetArray) {
-    // todo: Should only insert; no need to generate entire tweet array.
     $entityManager = &$this->entityManager;
     foreach ($tweetArray as $tweet) {
       $entityManager->persist($tweet);
     }
     $entityManager->flush();
-    // todo: hold onto list of entities, check if each entity exists in the DB before insertion.
-    //  Check against DB to see if there are any results that have the exact same tweetId.
   }
 
 
@@ -52,7 +47,7 @@ class DataPersist
     // todo: Fix name schemes here. They're bad.
 
     if ($dbTweetsFound) {
-      $tweetsPersisted = $this->persistFromFront($accountName, self::$MAX_TWEET_LIMIT);
+      $tweetsPersisted = $this->persistFromFront($accountName);
     } else {
       $tweetsPersisted = $this->pushPossibleTweets($accountName, $tweetsWanted);
     }

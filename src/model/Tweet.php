@@ -22,13 +22,18 @@ class Tweet
   protected $message;
   /** @Column(type="datetime") **/
   protected $date;
+  /** @Column(type="integer"), options={"unsigned":true} **/
+  // 0: regular
+  // 1: retweet
+  protected $type;
 
 
-  public function __construct($author, $tweetId, $message, $date) {
+  public function __construct($author, $tweetId, $message, $date, $type) {
     $this->author = $author;
     $this->tweetId = $tweetId;
     $this->message = $message;
     $this->date = $date;
+    $this->type = $type;
   }
 
   /**

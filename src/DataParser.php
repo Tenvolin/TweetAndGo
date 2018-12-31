@@ -59,8 +59,9 @@ class DataParser
     $message = $this->parseTweetMessage($e);
     // todo; datetime not as accurate as we'd like. Getting 1-day off errors._
     $timestamp =  Util::convertUnformattedTwitterDateToDateTime($this->parseContainerTimestamp($e));
+    $type = $this->parseTweetType($e);
 
-    $tweet = new Tweet($author, $tweetId, $message, $timestamp);
+    $tweet = new Tweet($author, $tweetId, $message, $timestamp, $type);
     array_push($tweetArray, $tweet);
   }
   return $tweetArray;
@@ -159,4 +160,20 @@ class DataParser
     return $author;
   }
 
+
+  private function parseTweetType(DiDom\Element $tweetTableNode) {
+    $result = $tweetTableNode->find("span.context");
+    if (count($result) <= 0) // todo: replicate this for all other parsing; make more robust.
+      return 0;
+
+    $eSpan = $result[0];
+
+    // retweet
+    $searchIndex = mb_stripos($eSpan->text(), "retweet", 0, 'UTF-8') ;
+    if ($searchIndex >= 0)
+      return 1;
+
+    // No type found
+    throw new ParseException("No tweet type found.");
+  }
 }
