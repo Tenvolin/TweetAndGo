@@ -35,258 +35,94 @@ class DataPersist
    * @param $entityManager EntityManager
    * @throws Exception
    */
-  public static function pushTweetArray($tweetArray, $entityManager) {
+  public function pushTweetArray($tweetArray) {
     // todo: Should only insert; no need to generate entire tweet array.
-      foreach ($tweetArray as $tweet) {
-        $entityManager->persist($tweet);
-      }
-      $entityManager->flush();
-      // todo: hold onto list of entities, check if each entity exists in the DB before insertion.
-      //  Check against DB to see if there are any results that have the exact same tweetId.
+    $entityManager = &$this->entityManager;
+    foreach ($tweetArray as $tweet) {
+      $entityManager->persist($tweet);
+    }
+    $entityManager->flush();
+    // todo: hold onto list of entities, check if each entity exists in the DB before insertion.
+    //  Check against DB to see if there are any results that have the exact same tweetId.
   }
 
 
   public function fetchAndPersistTweets($accountName, $tweetsWanted) {
-    // ==== Persistence logic below.
-    // 1) parse one page; then, attempt to insert. On exception thrown, insert all that we can.
-    // 2) Pull the remainder from database   entries;
-    // 3) Should we not have enough database entries, pull the remaining entries.
+    $dbTweetsFound = $this->tweetsExistInDbForAccount($accountName);
+    // todo: Fix name schemes here. They're bad.
 
-    // 1) Extract all tweets made between now and the tweet made;
-    // 2) or insert N tweets for the fresh account.
-    $dbTweetsExist = $this->tweetsExistInDbForAccount($accountName);
-    if ($dbTweetsExist) {
-      $results1= $this->pushPossibleTweets($accountName, self::$MAX_TWEET_LIMIT);
+    if ($dbTweetsFound) {
+      $tweetsPersisted = $this->persistFromFront($accountName, self::$MAX_TWEET_LIMIT);
     } else {
-      $results1= $this->pushPossibleTweets($accountName, $tweetsWanted);
+      $tweetsPersisted = $this->pushPossibleTweets($accountName, $tweetsWanted);
     }
 
-
-    // when tweets pre-exist in db, one page of tweets will contain >= 0 tweets that need to be inserted.
-    $tweetsFetched = $results1['tweetsFetched'];
-    $insertExceptionFound = $results1['insertExceptionFound'];
-    $lastPageOfTweets = $results1['lastPageOfTweets'];
-    $results2 = [];
-    if ($insertExceptionFound) {
-      // attempt to fetch entries from DB;
-      $results2 = $this->insertRemainingTweetsFromLastPage($accountName, $tweetsFetched, $lastPageOfTweets);
-
+    $dbTweetsAvailable = $this->dbHasSufficientTweets($accountName, $tweetsWanted);
+    if ($dbTweetsFound && $dbTweetsAvailable < 0 ) {
+      $tweetsPersisted += $this->persistFromBack($accountName);
     }
 
-
-    // If DB was unable to satisfy tweet count, attempt a final fetch, beginning from the last tweet made.
-    if (count($results2) > 0 ) {
-      $tweetsFetched = $results2['tweetsFetched'];
-      // check if the database can satisfy $tweetsWanted
-      // todo: rename difference and these vars, maybe refactor out.
-      $difference = $this->dbHasSufficientTweets($accountName, $tweetsWanted);
-      if ($difference < 0) {
-//        $nextPageLink = $this->getNextPageLinkFromLastTweet($accountName);
-        $results3 = $this->pushPossibleTweetsFromEnd($accountName, abs($difference));
-        $i = 5;
-      }
-    $i = 5;
-    }
-
-//    // attempt to fetch from $fetchCount * 20, 20 tweets from the current account.
+    return $tweetsPersisted;
+// refactor start
+//    // when tweets pre-exist in db, one page of tweets will contain >= 0 tweets that need to be inserted.
+//    $tweetsFetched = $results1['tweetsFetched'];
+//    $insertExceptionFound = $results1['insertExceptionFound'];
+//    $lastPageOfTweets = $results1['lastPageOfTweets'];
+//    $results2 = [];
 //    if ($insertExceptionFound) {
-//      $offset = $pageFetchCount * self::$tweetBatch;
-//      $pageFetchCount++;
+//      // attempt to fetch entries from DB;
+//      $results2 = $this->insertRemainingTweetsFromLastPage($accountName, $tweetsFetched, $lastPageOfTweets);
 //
-//      $qb = $entityManager->createQueryBuilder();
-//      $qb->select('t') //t.id, t.tweetId, t.message, t.date, t.author
-//      ->from('Tweet', 't')
-//        ->where("t.author = $accountName")
-//        ->orderBy('t.tweetId', 'DESC')
-//        ->setFirstResult($offset)
-//        ->setMaxResults(self::$tweetBatch);
-//      $query = $qb->getQuery();
+//    }
 //
-//      $result = $query->getResult();
-//      $filteredResults = Util::filterExclusiveTweets($tweetArray, $result);
 //
-//      try {
-//        DataPersist::pushTweetArray($filteredResults, $entityManager);
-//      } catch (Exception $e) {
-//        // terminate program,
-//        throw new RuntimeException("Unable to insert filtered exclusive tweets;
-//      something in persistence logic probably went wrong.");
+//    // If DB was unable to satisfy tweet count, attempt a final fetch, beginning from the last tweet made.
+//    if (count($results2) > 0 ) {
+//      $tweetsFetched = $results2['tweetsFetched'];
+//      // check if the database can satisfy $tweetsWanted
+//      // todo: rename difference and these vars, maybe refactor out.
+//      $difference = $this->dbHasSufficientTweets($accountName, $tweetsWanted);
+//      if ($difference < 0) {
+////        $nextPageLink = $this->getNextPageLinkFromLastTweet($accountName);
+//        $results3 = $this->pushPossibleTweetsFromEnd($accountName, abs($difference));
+//        $i = 5;
 //      }
+//    $i = 5;
 //    }
-
-//    // pull possible remaining entries from db.
-//    // Ensure enough entries remain before pulling, so as to avoid db exceptions.
-//    $tweetsInDb = 0;
-//    $tweetsToFetchRemaining = 0;
-//    if ($pagesToFetch < $pageFetchCount) {
-//      $qb = null;
-//      $query = null;
-//
-//      $qb = $entityManager->createQueryBuilder();
-//      $qb->select('count(t)')
-//        ->from('Tweet', 't')
-//        ->where("t.author = $accountName")
-//        ->orderBy('t.tweetId', 'DESC');
-//      $query = $qb->getQuery();
-//
-//      $tweetsInDb = $query->getScalarResult();
-//      $tweetsToFetchRemaining = ($pageFetchCount - $pagesToFetch) * self::$TWEET_BATCH;
-//    }
-//
-//
-//
-//    if ($tweetsToFetchRemaining > 0) {
-//      $qb = null;
-//      $query = null;
-//      $result = null;
-//      $qb = $entityManager ->createQueryBuilder();
-//
-//    // Fetch for the following scenarios:
-//    //  1) DB does not have any tweets required.
-//    //  2) DB has enough tweets required.
-//    //  3) Does not have enough tweets required, but some.
-//      if ($tweetsInDb == 0) {
-//        // Do nothing; nothing to pull from DB.
-//      } else if ($tweetsToFetchRemaining <= $tweetsInDb) {
-//        $qb->select('t')
-//          ->from('Tweet', 't')
-//          ->where("t.author = $accountName")
-//          ->orderBy('t.tweetId', 'DESC')
-//          ->setMaxResults($tweetsToFetchRemaining);
-//
-//        $query = $qb->getQuery();
-//        $result = $query->getResult();
-//        $tweetsToFetchRemaining = 0; // DB fully satisfies tweet request.
-//      } else if ($tweetsToFetchRemaining > $tweetsInDb) {
-//        $qb->select('t')
-//          ->from('Tweet', 't')
-//          ->where("t.author = $accountName")
-//          ->orderBy('t.tweetId', 'DESC')
-//          ->setMaxResults($tweetsInDb);
-//
-//        $query = $qb->getQuery();
-//        $result = $query->getResult();
-//        $tweetsToFetchRemaining -= $tweetsInDb;
-//      }
-//    }
-
-
-//// fetch the remaining possible entries from twitter, when DB is exhausted.
-//// pull the last tweet.
-//// This will not trigger if DB was never prompted.
-//if ($tweetsToFetchRemaining >= 0) {
-//  $qb = null;
-//  $query = null;
-//  $result = null;
-//  $qb = $entityManager ->createQueryBuilder();
-//
-//  // Generate nextPageLink via last tweet stored in DB.
-//  $qb->select('t')
-//    ->from('Tweet', 't')
-//    ->where("t.author = $accountName")
-//    ->orderBy('t.tweetId', 'ASC')
-//    ->setMaxResults(1);
-//
-//
-//  // fetch remaining tweets
-//  for ( ; $pageFetchCount < $pagesToFetch; $pageFetchCount++) {
-//    $link = $dataParser->parseNextPageLink();
-//    $tweetsHtmlData = $dataFetcher->delayedFetch($accountName, $link);
-//    $dataParser->loadHtmlStr($tweetsHtmlData);
-//    $tweetArray = $dataParser->parseTweetsAndFeatures(); // tuples; maybe generate array of Tweet entities?
-//
-//    try {
-//      DataPusher::pushTweetArray($tweetArray, $entityManager);
-//
-//    } catch (Exception $e) {
-//      // EntityManager object closes; must recreate and begin fetching from database instead.
-//      $insertExceptionFound = true;
-//      try {
-//        $entityManager = EntityManager::create($conn, $config);
-//      } catch (Exception $e) {
-//        throw new RuntimeException("EntityManager instantiation error: $e");
-//      }
-//      break;
-//    }
-//  }
-//}
+// refactor end
   }
 
   /**
-   * Attempt to fetch $tweetCount tweets and persist to DB.
-   * On failure to persist, caller will attempt to pull remaining from DB;
-   * should DB not supply enough, one last attempt to pull more tweets using
-   * the last DB entry.
+   * Persists some tweets to DB for some account with no pre-existing records in DB.
+   * Returns a count of total possible inserts into DB.
    * @param $accountName
    * @param $tweetsToFetch
-   * @return array
+   * @return int
    */
   private function pushPossibleTweets($accountName, $tweetsToFetch) {
-    // todo: turn each large if/forloop block into helper functions like this.
-    // todo: output only tweetsRemaining, and if an exception was found.
-    //  That's the only logic we care about.
-    $dataFetcher = $this->dataFetcher;
-    $dataParser = $this->dataParser;
-    $entityManager = &$this->entityManager;
-    $conn = $this->conn;
-    $config = $this->config;
+    $dataFetcher = &$this->dataFetcher;
+    $dataParser = &$this->dataParser;
 
-    $tweetsFetched = 0;
-    $insertExceptionFound = false;
-    $tweetArray = [];
-
-    $pagesToFetch = ceil($tweetsToFetch / 20);
-    $pageFetchCount = 0;
-    for ( ; $pageFetchCount < $pagesToFetch; $pageFetchCount++) {
+    $fetchCount = 0;
+    while ($fetchCount <= $tweetsToFetch) {
       $link = $dataParser->parseNextPageLink();
       $tweetsHtmlData = $dataFetcher->delayedFetch($accountName, $link);
       $dataParser->loadHtmlStr($tweetsHtmlData);
-      $tweetArray = $dataParser->parseTweetsAndFeatures(); // tuples; maybe generate array of Tweet entities?
 
-      // start refact
-      while (true) {
-        try {
-          DataPersist::pushTweetArray($tweetArray, $entityManager);
-          $tweetsFetched += count($tweetArray);
-          break;
-        } catch (Exception $e) {
-          $insertExceptionFound = true;
-          $offendingTweetId = ErrorParser::parseDuplicateMessageForTweetId($e->getMessage());
-
-          $tweetArray = ErrorParser::filterOutOffendingTweet($tweetArray, $offendingTweetId);
-          try {
-            $entityManager = EntityManager::create($conn, $config);
-          } catch (Exception $e) {
-            throw new RuntimeException("EntityManager instantiation error: $e");
-          }
-        }
+      $tweetArray = $dataParser->parseTweetsAndFeatures();
+      if (count($tweetArray) == 0) {
+        break;
       }
-      // end
-//      try {
-//        DataPersist::pushTweetArray($tweetArray, $entityManager);
-//        $tweetsFetched += count($tweetArray);
-//      } catch (\Doctrine\DBAL\Exception\UniqueConstraintViolationException $e) {
-//        // EntityManager object closes; must recreate and begin fetching from database instead.
-//        $insertExceptionFound = true;
-//        $offendingTweetId =
-//          ErrorParser::parseDuplicateMessageForTweetId($e->getMessage());
-//        // todo: on failure, parse error message for problematic id and filter it out from our tweetArray.
-//        //    Re-attempt.
-//
-//        $tweetArray = ErrorParser::filterOutOffendingTweet($tweetArray, $offendingTweetId);
-//        try {
-//          $this->entityManager = EntityManager::create($conn, $config);
-//        } catch (Exception $e) {
-//          throw new RuntimeException("EntityManager instantiation error: $e");
-//        }
-//      }
+
+      $pushedArray = $this->pushAndIgnoreConflicts($tweetArray);
+      if (count($pushedArray) == 0) {
+        throw new \http\Exception\RuntimeException("One page of tweets did not have a single tweet that could
+        be inserted. This method should not have been called if DB entries pre-exist.");
+      }
+      $fetchCount += count($pushedArray);
     }
 
-    $results = [];
-    $results['tweetsFetched'] = $tweetsFetched;
-    $results['insertExceptionFound'] = $insertExceptionFound;
-    $results['lastPageOfTweets'] = $tweetArray;
-    return $results;
+    return $fetchCount;
   }
 
 
@@ -298,7 +134,7 @@ class DataPersist
    * @param $accountName
    * @param $offset
    * @param $lastPageOfTweets
-   * @return array
+   * @return int
    */
   private function insertRemainingTweetsFromLastPage($accountName, $offset, $lastPageOfTweets) {
     $entityManager = $this->entityManager;
@@ -307,7 +143,7 @@ class DataPersist
     $qb->select('t')
       ->from('Tweet', 't')
       ->where("t.author = '$accountName'")
-      ->orderBy('t.tweetId', 'DESC')
+      ->orderBy('t.date', 'DESC')
       ->setFirstResult($offset)
       ->setMaxResults(self::$TWEET_BATCH);
     $query = $qb->getQuery();
@@ -316,7 +152,7 @@ class DataPersist
     $filteredResults = Util::filterExclusiveTweets($lastPageOfTweets, $result);
 
     try {
-      DataPersist::pushTweetArray($filteredResults, $entityManager);
+      $this->pushTweetArray($filteredResults);
     } catch (Exception $e) {
       // terminate program,
       throw new RuntimeException("Unable to insert filtered exclusive tweets;
@@ -324,10 +160,7 @@ class DataPersist
     }
 
     // return tweetsToFetchRemaining;
-    $tweetsFetched = count($filteredResults);
-    $results = [];
-    $results['tweetsFetched'] = $tweetsFetched;
-    return $results;
+    return count($filteredResults);
   }
 
   private function tweetsExistInDbForAccount(String $accountName) {
@@ -370,7 +203,7 @@ class DataPersist
       $tweetArray = $dataParser->parseTweetsAndFeatures(); // tuples; maybe generate array of Tweet entities?
 
       try {
-        DataPersist::pushTweetArray($tweetArray, $entityManager);
+        $this->pushTweetArray($tweetArray);
         $tweetsFetched += count($tweetArray);
       } catch (Exception $e) {
         // EntityManager object closes; must recreate and begin fetching from database instead.
@@ -453,5 +286,76 @@ class DataPersist
     $tweetsInDb = $query->getScalarResult()[0][1];
 
     return $tweetsInDb - $tweetsWanted;
+  }
+
+  /**
+   * Persists some subset of $tweetArray to DB.
+   * @param array $tweetArray
+   * @return array
+   */
+  private function pushAndIgnoreConflicts(array $tweetArray) {
+    $entityManager = &$this->entityManager;
+    $conn = &$this->conn;
+    $config = &$this->config;
+
+    while (count($tweetArray) != 0) {
+      try {
+        $this->pushTweetArray($tweetArray);
+        break;
+      } catch (Exception $e) {
+        $offendingTweetId = ErrorParser::parseDuplicateMessageForTweetId($e->getMessage());
+
+        $tweetArray = ErrorParser::filterOutOffendingTweet($tweetArray, $offendingTweetId);
+        try {
+          $entityManager = EntityManager::create($conn, $config);
+        } catch (Exception $e) {
+          throw new RuntimeException("EntityManager instantiation error: $e");
+        }
+      }
+    }
+
+    return $tweetArray;
+  }
+
+  private function persistFromFront($accountName) {
+    $tweetsToFetch = self::$MAX_TWEET_LIMIT;
+    $dataFetcher = &$this->dataFetcher;
+    $dataParser = &$this->dataParser;
+
+    $fetchCount = 0;
+    while ($fetchCount <= $tweetsToFetch) {
+      $link = $dataParser->parseNextPageLink();
+      $tweetsHtmlData = $dataFetcher->delayedFetch($accountName, $link);
+      $dataParser->loadHtmlStr($tweetsHtmlData);
+
+      $tweetArray = $dataParser->parseTweetsAndFeatures();
+      if (count($tweetArray) == 0) {
+        throw new \http\Exception\RuntimeException("Unable to fetch tweets when there should be");
+      }
+
+      try {
+        $this->pushTweetArray($tweetArray);
+      } catch(Exception $e) {
+        $this->reopenEntityManager();
+        // push remainder
+        $fetchCount += $this->insertRemainingTweetsFromLastPage($accountName, $fetchCount, $tweetArray);
+        break;
+      }
+
+      $fetchCount += count($tweetArray);
+    }
+
+    return $fetchCount;
+  }
+
+  private function reopenEntityManager() {
+    $entityManager = &$this->entityManager;
+    $conn = &$this->conn;
+    $config = &$this->config;
+    try {
+      $entityManager = EntityManager::create($conn, $config);
+    } catch (Exception $e) {
+      throw new RuntimeException("EntityManager instantiation error: $e");
+    }
   }
 }

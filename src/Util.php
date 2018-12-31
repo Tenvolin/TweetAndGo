@@ -51,11 +51,11 @@ class Util {
     // abbreviated date will be of the following form:
     // Not going to store exact times, as that's going to require many more http requests, which may result in banning.
     // | "dec 21" - This tweet took place on this day.
+    // | "9 Jun 2016" - a date in a previous year.
     // | "2d" - 2 days old.
     // | "2h" - 2 hours old.
     // | "2m" - 2 mins old.
     // | "2s" - 2 secs old.
-    // | "9 Jun 2016" - a date in a previous year.
     try {
       $currentDateTime = null;
       $courseOfAction = self::findTimeFormat($abbreviatedDate);
@@ -76,13 +76,22 @@ class Util {
       } else if ( $courseOfAction === self::TIME_FORMAT_WITHIN_DAYS) {
         $dateStr = intval($abbreviatedDate) . "days";
         $tweetDateTime = new DateTime($dateStr);
-      } else if ($courseOfAction === self::TIME_FORMAT_WITHIN_MONTH ) {
-        $dateStr = intval($abbreviatedDate) . "months";
-        $tweetDateTime = new DateTime($dateStr);
-      } else if ($courseOfAction === self::TIME_FORMAT_BEYOND_YEAR) {
-        $dateStr = intval($abbreviatedDate) . "years";
-        $tweetDateTime = new DateTime($dateStr);
+      } else if (self::isDifferentMonthSameYear($abbreviatedDate)) {
+        $tweetDateTime = new DateTime($abbreviatedDate);
+      } else if (self::isDifferentYear($abbreviatedDate)) {
+//        $result = preg_split("/ /", $abbreviatedDate);
+//        $day = $result[0];
+//        $month = $result[1];
+//        $year = $result[2];
+        $tweetDateTime = new DateTime($abbreviatedDate);
       }
+//      else if ($courseOfAction === self::TIME_FORMAT_WITHIN_MONTH ) {
+//        $dateStr = intval($abbreviatedDate) . "months";
+//        $tweetDateTime = new DateTime($dateStr);
+//      } else if ($courseOfAction === self::TIME_FORMAT_BEYOND_YEAR) {
+//        $dateStr = intval($abbreviatedDate) . "years";
+//        $tweetDateTime = new DateTime($dateStr);
+//      }
 
 
        // todo: handle this scenario better?
@@ -187,6 +196,18 @@ class Util {
     }
 
     return $result;
+  }
+
+  // todo: fix. Not proper check.
+  public static function isDifferentMonthSameYear(String $date)
+  {
+    return mb_strlen($date, 'UTF-8') == 5 || mb_strlen($date, 'UTF-8') == 6;
+  }
+
+  public static function isDifferentYear(String $date)
+  {
+    $result = preg_split("/ /", $date);
+    return count($result) == 3;
   }
 }
 
