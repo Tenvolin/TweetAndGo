@@ -30,8 +30,9 @@ class ErrorParser
                           'UTF-8');
 
     $splitArr = preg_split("/[,]+/", $strToSplit);
-
-    return self::parseTweetIdFromSplitResult($splitArr);
+    $tweetId = $splitArr[1];
+    $tweetId = trim(preg_replace('/"*/', '', $tweetId));
+    return $tweetId;
   }
 
   private static function parseTweetIdFromSplitResult($splitArr) {
@@ -39,7 +40,7 @@ class ErrorParser
     foreach ($splitArr as $str) {
       $intCheck = preg_match("/[\d+]/", $str, $result);
       if ($intCheck == 1) {
-        return trim(preg_replace('/"*/', '', $str));
+        return ;
       }
     }
     return "";

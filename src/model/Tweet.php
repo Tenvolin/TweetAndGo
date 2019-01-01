@@ -16,7 +16,7 @@ class Tweet
   protected $id;
   /** @Column(type="string") unique=true **/
   protected $author;
-  /** @Column(type="bigint", unique=true, options={"unsigned":true}) **/
+  /** @Column(type="string", unique=true) **/
   protected $tweetId;
   /** @Column(type="string", length=1120) **/
   protected $message;

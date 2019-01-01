@@ -35,7 +35,7 @@ class DataFetcher
    */
   public function delayedFetch($accountName, $link = "")
   {
-    usleep(rand(500000, 1000000));
+    usleep(rand(1000000, 1500000));
 
     if (mb_strlen($link, "UTF-8") <= 0)
       $link = $this->baseLink . $accountName;

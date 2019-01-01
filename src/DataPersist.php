@@ -99,6 +99,7 @@ class DataPersist
     $dataParser = &$this->dataParser;
 
     $fetchCount = 0;
+    $firstPage = true;
     while ($fetchCount <= $tweetsToFetch) {
       $link = $dataParser->parseNextPageLink();
       $tweetsHtmlData = $dataFetcher->delayedFetch($accountName, $link);
@@ -109,12 +110,19 @@ class DataPersist
         break;
       }
 
+      //todo: This method blocks our code when the button disappears;
+      //   Need a way to push the last page, while terminating gracefully.
       $pushedArray = $this->pushAndIgnoreConflicts($tweetArray);
-      if (count($pushedArray) == 0) {
-        throw new \http\Exception\RuntimeException("One page of tweets did not have a single tweet that could
-        be inserted. This method should not have been called if DB entries pre-exist.");
+      if (count($pushedArray) == 0 ||
+        (mb_strlen($link) <= 0 && !$firstPage)) {
+        // End of parsing.
+        Logger::logIfDebugging("Last page encountered. Fetch count: $fetchCount");
+        break;
       }
       $fetchCount += count($pushedArray);
+
+
+      $firstPage = false;
     }
 
     return $fetchCount;

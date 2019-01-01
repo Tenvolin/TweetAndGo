@@ -29,6 +29,13 @@ class Logger
     fwrite($file, $timeStr . $msg . "\n");
   }
 
+  public static function logIfDebugging($msg) {
+    if (!is_null($GLOBALS['debug_logger'])) {
+      $GLOBALS['debug_logger']->log($msg);
+    }
+  }
+
+
   public function close() {
     $file = &$this->file;
     fclose($file);

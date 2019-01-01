@@ -1,6 +1,6 @@
 TODO:
 X - implement parsing of tweet type; distinguish between regular and retweet.
-- implement logging.
+X - implement logging.
 - fix the crash we have.
 - implement parse from back;
   i.e. parse with offset.
