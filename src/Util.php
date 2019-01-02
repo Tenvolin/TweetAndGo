@@ -79,20 +79,15 @@ class Util {
       } else if (self::isDifferentMonthSameYear($abbreviatedDate)) {
         $tweetDateTime = new DateTime($abbreviatedDate);
       } else if (self::isDifferentYear($abbreviatedDate)) {
-//        $result = preg_split("/ /", $abbreviatedDate);
-//        $day = $result[0];
-//        $month = $result[1];
-//        $year = $result[2];
         $tweetDateTime = new DateTime($abbreviatedDate);
       }
-//      else if ($courseOfAction === self::TIME_FORMAT_WITHIN_MONTH ) {
-//        $dateStr = intval($abbreviatedDate) . "months";
-//        $tweetDateTime = new DateTime($dateStr);
-//      } else if ($courseOfAction === self::TIME_FORMAT_BEYOND_YEAR) {
-//        $dateStr = intval($abbreviatedDate) . "years";
-//        $tweetDateTime = new DateTime($dateStr);
-//      }
 
+
+      // remove one year; mobile twitter removes the year from posts within a year.
+      if (self::needToRemoveOneYear($tweetDateTime)) {
+        $dateInterval = new DateInterval("P1Y");
+        $tweetDateTime->sub($dateInterval);
+      }
 
        // todo: handle this scenario better?
       if (is_null($tweetDateTime)) {
@@ -208,6 +203,23 @@ class Util {
   {
     $result = preg_split("/ /", $date);
     return count($result) == 3;
+  }
+
+  /**
+   *
+   * @param DateTime $someDate
+   * @return bool
+   * @throws Exception
+   */
+  public static function needToRemoveOneYear(DateTime $someDate) {
+    $currentDate = new DateTime();
+
+    $diff = $someDate->diff($currentDate);
+    if ($diff->invert) {
+      return true;
+    }
+
+    return false;
   }
 }
 
