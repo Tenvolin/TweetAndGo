@@ -15,7 +15,8 @@ class Logger
     $this->file = fopen('log.txt', 'a');
     fwrite($this->file, "\n");
   }
-  public function log($msg) {
+  public function log($msg)
+  {
     $file = &$this->file;
     try {
       $timeStamp = new DateTime();
@@ -29,14 +30,16 @@ class Logger
     fwrite($file, $timeStr . $msg . "\n");
   }
 
-  public static function logIfDebugging($msg) {
+  public static function logIfDebugging($msg)
+  {
     if (!is_null($GLOBALS['debug_logger'])) {
       $GLOBALS['debug_logger']->log($msg);
     }
   }
 
 
-  public function close() {
+  public function close()
+  {
     $file = &$this->file;
     fclose($file);
   }

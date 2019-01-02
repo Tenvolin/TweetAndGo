@@ -15,8 +15,8 @@ class ErrorParser
 // "2018-12-30 03:18:56"]:
 //
 // SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '1079214392758145024' for key 'UNIQ_AA384025F6DA78B2'
-
-  static function parseDuplicateMessageForTweetId(String $msg) {
+  static function parseDuplicateMessageForTweetId(String $msg)
+  {
     // params \[.*]
     mb_regex_encoding('UTF-8');
     $results = [];
@@ -35,7 +35,8 @@ class ErrorParser
     return $tweetId;
   }
 
-  private static function parseTweetIdFromSplitResult($splitArr) {
+  private static function parseTweetIdFromSplitResult($splitArr)
+  {
     $result = [];
     foreach ($splitArr as $str) {
       $intCheck = preg_match("/[\d+]/", $str, $result);
@@ -46,7 +47,8 @@ class ErrorParser
     return "";
   }
 
-  public static function filterOutOffendingTweet($tweets, $tweetId) {
+  public static function filterOutOffendingTweet($tweets, $tweetId)
+  {
     $results =  array_filter($tweets,
                 function(Tweet $tweet) use($tweetId) {
                   return $tweet->getTweetId() != $tweetId;
@@ -55,7 +57,8 @@ class ErrorParser
     return $results;
   }
 
-  private static function containsTweetId(Tweet $tweet, String $tweetId) {
+  private static function containsTweetId(Tweet $tweet, String $tweetId)
+  {
     return ($tweet->getTweetId() === $tweetId);
   }
 

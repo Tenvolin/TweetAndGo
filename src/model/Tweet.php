@@ -28,7 +28,8 @@ class Tweet
   protected $type;
 
 
-  public function __construct($author, $tweetId, $message, $date, $type) {
+  public function __construct($author, $tweetId, $message, $date, $type)
+  {
     $this->author = $author;
     $this->tweetId = $tweetId;
     $this->message = $message;
@@ -84,11 +85,13 @@ class Tweet
     $this->date = $date;
   }
 
-  public function getMessage() {
+  public function getMessage()
+  {
     return $this->message;
   }
 
-  public function setMessage($msg) {
+  public function setMessage($msg)
+  {
     $this->message = $msg;
   }
 

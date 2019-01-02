@@ -16,38 +16,14 @@ class Util {
   const TIME_FORMAT_WITHIN_MONTH = 4;
   const TIME_FORMAT_BEYOND_YEAR = 5;
 
-  // https://stackoverflow.com/questions/3666306/how-to-iterate-utf-8-string-in-php/14366023#14366023
-  // return false or char.
-  public static function nextChar($string, &$pointer){
-    if(!isset($string[$pointer])) return false;
-    $char = ord($string[$pointer]);
-    if($char < 128){
-      return $string[$pointer++];
-    }else{
-      if($char < 224){
-        $bytes = 2;
-      }elseif($char < 240){
-        $bytes = 3;
-      }elseif($char < 248){
-        $bytes = 4;
-      }elseif($char == 252){
-        $bytes = 5;
-      }else{
-        $bytes = 6;
-      }
-      $str =  substr($string, $pointer, $bytes);
-      $pointer += $bytes;
-      return $str;
-    }
-  }
-
   /**
    * Timestamps of tweets are not consistently formatted. They take five possible variations and thus need to be converted
    * to a DateTime object before persistence.
    * @param $abbreviatedDate
    * @return DateTime
    */
-  public static function convertUnformattedTwitterDateToDateTime($abbreviatedDate) {
+  public static function convertUnformattedTwitterDateToDateTime($abbreviatedDate)
+  {
     // abbreviated date will be of the following form:
     // Not going to store exact times, as that's going to require many more http requests, which may result in banning.
     // | "dec 21" - This tweet took place on this day.
@@ -108,7 +84,8 @@ class Util {
    * @param $abbreviatedDate string
    * @return int
    */
-  private static function findTimeFormat($abbreviatedDate) {
+  private static function findTimeFormat($abbreviatedDate)
+  {
     $case = 0;
     $charsArray = preg_split('//u', $abbreviatedDate, null, PREG_SPLIT_NO_EMPTY);
     $lastIndex = count($charsArray) - 1;
@@ -132,7 +109,8 @@ class Util {
    * Continually prompt user for input until some possible username found.
    * @return string
    */
-  public static function promptForValidUsername() {
+  public static function promptForValidUsername()
+  {
     $isValidInput = false;
     $account = "";
 
@@ -153,7 +131,8 @@ class Util {
    * Continually prompt user for input until integer found.
    * @return int
    */
-  public static function promptForValidTweetCount() {
+  public static function promptForValidTweetCount()
+  {
     $isValidInput = false;
     $tweetCount = 0;
 
@@ -211,7 +190,8 @@ class Util {
    * @return bool
    * @throws Exception
    */
-  public static function needToRemoveOneYear(DateTime $someDate) {
+  public static function needToRemoveOneYear(DateTime $someDate)
+  {
     $currentDate = new DateTime();
 
     $diff = $someDate->diff($currentDate);

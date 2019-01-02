@@ -13,7 +13,8 @@ class DataParser
   private $document;
   private $canonicalLink;
 
-  public function __construct() {
+  public function __construct()
+  {
     $this->document = new Document();
   }
 
@@ -24,7 +25,8 @@ class DataParser
    * Always call this method before parsing.
    * @param $htmlStr
    */
-  public function loadHtmlStr($htmlStr) {
+  public function loadHtmlStr($htmlStr)
+  {
     $this->document->loadHtml($htmlStr);
 
     $result = $this->document->find('*[rel=canonical]');
@@ -45,7 +47,8 @@ class DataParser
    * Features: tweetText, timestamp.
    * @return Tweet[];
    */
-  public function parseTweetsAndFeatures() {
+  public function parseTweetsAndFeatures()
+  {
   // Parse out all tables
   $document = $this->document;
   $tables = $document->find("table.tweet"); // todo: refactor this and other find-calls to throw exception
@@ -54,7 +57,8 @@ class DataParser
   // generate an array that contains fields to push into DB.
   $tweetArray = [];
 
-  foreach ($tables as $e) {
+  foreach ($tables as $e)
+  {
     $tweetId = $this->parseTweetId($e);
     $message = $this->parseTweetMessage($e);
     // todo; datetime not as accurate as we'd like. Getting 1-day off errors._
@@ -67,7 +71,8 @@ class DataParser
   return $tweetArray;
   }
 
-  public function parseNextPageLink() {
+  public function parseNextPageLink()
+  {
     $document = $this->document;
     try {
       $results = $document->find("div.w-button-more>a");
@@ -99,7 +104,8 @@ class DataParser
    * @param $tweetTableNode
    * @return string
    */
-  private function parseTweetMessage($tweetTableNode) {
+  private function parseTweetMessage($tweetTableNode)
+  {
     $result = $tweetTableNode->find("div.tweet-text");
     if (count($result) <= 0) {
       throw new ParseException("No tweet message found");
@@ -116,7 +122,8 @@ class DataParser
    * @param $tweetTableNode
    * @return string
    */
-  private static function parseContainerTimestamp($tweetTableNode) {
+  private static function parseContainerTimestamp($tweetTableNode)
+  {
     $result = $tweetTableNode->find("td.timestamp");
     if (count($result) <= 0) {
       throw new ParseException("No timestamp found");
@@ -131,7 +138,8 @@ class DataParser
    * @param $tweetTableNode
    * @return string
    */
-  private function parseTweetId($tweetTableNode) {
+  private function parseTweetId($tweetTableNode)
+  {
     $resultStr = $tweetTableNode->getAttribute('href');
     if (mb_strlen($resultStr) <= 0) {
       throw new ParseException("No tweetId found.");
@@ -152,7 +160,8 @@ class DataParser
    * @param $document
    * @return string
    */
-  private function parseAuthor($document) {
+  private function parseAuthor($document)
+  {
     $result = $document->find("div.profile .screen-name");
     if (count($result) <= 0) {
       throw new ParseException("No author found.");
@@ -171,7 +180,8 @@ class DataParser
   }
 
 
-  private function parseTweetType(DiDom\Element $tweetTableNode) {
+  private function parseTweetType(DiDom\Element $tweetTableNode)
+  {
     // todo: Consider how to throw exception here.
     $result = $tweetTableNode->find("span.context");
     if (count($result) <= 0)
