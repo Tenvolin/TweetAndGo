@@ -43,18 +43,13 @@ class DataPersist
 
 
   public function fetchAndPersistTweets($accountName, $tweetsWanted) {
-    $dbTweetsFound = $this->tweetsExistInDbForAccount($accountName);
     // todo: Fix name schemes here. They're bad.
-
-    if ($dbTweetsFound) {
-      $tweetsPersisted = $this->persistFromFront($accountName);
-    } else {
-      $tweetsPersisted = $this->pushPossibleTweets($accountName, $tweetsWanted);
-    }
+    $dbTweetsFound = $this->tweetsExistInDbForAccount($accountName);
+    $tweetsPersisted = $this->pushPossibleTweets($accountName, $tweetsWanted, $dbTweetsFound);
 
     $dbTweetsAvailable = $this->dbHasSufficientTweets($accountName, $tweetsWanted);
-    if ($dbTweetsFound && $dbTweetsAvailable < 0 ) {
-      $tweetsPersisted += $this->persistFromBack($accountName);
+    if ($dbTweetsFound && $dbTweetsAvailable < 0) {
+      $tweetsPersisted += $this->pushPossibleTweets($accountName, abs($dbTweetsAvailable), $dbTweetsFound, true);
     }
 
     return $tweetsPersisted;
@@ -92,39 +87,47 @@ class DataPersist
    * Returns a count of total possible inserts into DB.
    * @param $accountName
    * @param $tweetsToFetch
+   * @param bool $fillFromFront
+   * @param bool $fillFromBack
    * @return int
    */
-  private function pushPossibleTweets($accountName, $tweetsToFetch) {
+  private function pushPossibleTweets($accountName, $tweetsToFetch, $fillFromFront= false, $fillFromBack = false) {
     $dataFetcher = &$this->dataFetcher;
     $dataParser = &$this->dataParser;
 
+    if ($fillFromFront && !$fillFromBack) {
+      $tweetsToFetch = self::$MAX_TWEET_LIMIT;
+    }
+    if(!$fillFromFront && $fillFromBack) {
+      throw new \http\Exception\RuntimeException("Improper use of pushPossibleTweets() flags");
+    }
+
     $fetchCount = 0;
     $firstPage = true;
-    while ($fetchCount <= $tweetsToFetch) {
-      $link = $dataParser->parseNextPageLink();
+    while ($fetchCount < $tweetsToFetch) {
+      $link = ($fillFromBack && $firstPage) ? $this->getNextPageLinkFromLastTweet($accountName) : $dataParser->parseNextPageLink();
+
       $tweetsHtmlData = $dataFetcher->delayedFetch($accountName, $link);
       $dataParser->loadHtmlStr($tweetsHtmlData);
 
       $tweetArray = $dataParser->parseTweetsAndFeatures();
       if (count($tweetArray) == 0) {
+        // end of parsing.
         break;
       }
 
-      //todo: This method blocks our code when the button disappears;
-      //   Need a way to push the last page, while terminating gracefully.
       $pushedArray = $this->pushAndIgnoreConflicts($tweetArray);
       if (count($pushedArray) == 0 ||
-        (mb_strlen($link) <= 0 && !$firstPage)) {
+          (mb_strlen($link) <= 0 && !$firstPage)) {
         // End of parsing.
-        Logger::logIfDebugging("Last page encountered. Fetch count: $fetchCount");
         break;
       }
+
       $fetchCount += count($pushedArray);
-
-
       $firstPage = false;
     }
 
+    Logger::logIfDebugging("end pushPossibleTweets: $fetchCount");
     return $fetchCount;
   }
 
@@ -326,6 +329,7 @@ class DataPersist
     $dataParser = &$this->dataParser;
 
     $fetchCount = 0;
+    $firstPage = true;
     while ($fetchCount <= $tweetsToFetch) {
       $link = $dataParser->parseNextPageLink();
       $tweetsHtmlData = $dataFetcher->delayedFetch($accountName, $link);
@@ -333,21 +337,22 @@ class DataPersist
 
       $tweetArray = $dataParser->parseTweetsAndFeatures();
       if (count($tweetArray) == 0) {
-        throw new \http\Exception\RuntimeException("Unable to fetch tweets when there should be");
-      }
-
-      try {
-        $this->pushTweetArray($tweetArray);
-      } catch(Exception $e) {
-        $this->reopenEntityManager();
-        // push remainder
-        $fetchCount += $this->insertRemainingTweetsFromLastPage($accountName, $fetchCount, $tweetArray);
+        // end of parsing.
         break;
       }
 
-      $fetchCount += count($tweetArray);
+      $pushedArray = $this->pushAndIgnoreConflicts($tweetArray);
+      if (count($pushedArray) == 0 ||
+        (mb_strlen($link) <= 0 && !$firstPage)) {
+        // End of parsing.
+        break;
+      }
+
+      $fetchCount += count($pushedArray);
+      $firstPage = false;
     }
 
+    Logger::logIfDebugging("end persistFromFront: $fetchCount");
     return $fetchCount;
   }
 

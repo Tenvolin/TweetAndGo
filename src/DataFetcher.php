@@ -35,6 +35,8 @@ class DataFetcher
    */
   public function delayedFetch($accountName, $link = "")
   {
+    // todo: refactor to not loop back on first page;
+    //  Currently, on the last page, we're parsing the home page all over and filtering again.
     usleep(rand(1000000, 1500000));
 
     if (mb_strlen($link, "UTF-8") <= 0)

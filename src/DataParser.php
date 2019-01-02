@@ -69,10 +69,15 @@ class DataParser
 
   public function parseNextPageLink() {
     $document = $this->document;
-    $results = $document->find("div.w-button-more>a");
-    if (count($results) <= 0) {
+    try {
+      $results = $document->find("div.w-button-more>a");
+      if (count($results) <= 0) {
+        return '';
+      }
+    } catch(Exception $e) {
       return '';
     }
+
     $eNextButton = $results[0];
 
     // Parse restEndpoint in order to CURL next page of tweets.
@@ -97,8 +102,9 @@ class DataParser
   private function parseTweetMessage($tweetTableNode) {
     $result = $tweetTableNode->find("div.tweet-text");
     if (count($result) <= 0) {
-      return '';
+      throw new ParseException("No tweet message found");
     }
+
     $eMessage = $result[0];
     $message = trim($eMessage->text());
     return $message;
@@ -113,8 +119,9 @@ class DataParser
   private static function parseContainerTimestamp($tweetTableNode) {
     $result = $tweetTableNode->find("td.timestamp");
     if (count($result) <= 0) {
-      return '';
+      throw new ParseException("No timestamp found");
     }
+
     $eTimestamp = $result[0];
     $timestamp = trim($eTimestamp->text());
     return $timestamp;
@@ -127,7 +134,7 @@ class DataParser
   private function parseTweetId($tweetTableNode) {
     $resultStr = $tweetTableNode->getAttribute('href');
     if (mb_strlen($resultStr) <= 0) {
-      return '';
+      throw new ParseException("No tweetId found.");
     }
 
     $tweetId = trim($resultStr);
@@ -148,8 +155,9 @@ class DataParser
   private function parseAuthor($document) {
     $result = $document->find("div.profile .screen-name");
     if (count($result) <= 0) {
-      return '';
+      throw new ParseException("No author found.");
     }
+
     $eAuthor = $result[0];
 
     $author = trim($eAuthor->text());
@@ -164,9 +172,11 @@ class DataParser
 
 
   private function parseTweetType(DiDom\Element $tweetTableNode) {
+    // todo: Consider how to throw exception here.
     $result = $tweetTableNode->find("span.context");
-    if (count($result) <= 0) // todo: replicate this for all other parsing; make more robust.
+    if (count($result) <= 0)
       return 0;
+
 
     $eSpan = $result[0];
 
