@@ -23,7 +23,6 @@ include_once "Logger.php";
 mb_internal_encoding("UTF-8");
 $pagesToFetch = 1;
 
-
 // Debug
 var_dump($argv);
 $isDebugging = false;
@@ -36,7 +35,7 @@ if (count($argv) > 1) {
 // Determine query options
 if ($isDebugging) {
   $accountName = "jaredpar"; // miraieu, realDonaldTrump, ladygaga, selenagomez, taylorswift13
-  $tweetCount = 25;
+  $tweetCount = 45;
 } else {
   $accountName = Util::promptForValidUsername();
   $tweetCount = Util::promptForValidTweetCount();

@@ -36,21 +36,8 @@ class DataPersist
   }
 
   /**
-   * Attempt to insert an array of Tweet entities.
-   * @param array $tweetArray
-   * @throws \Doctrine\ORM\ORMException
-   * @throws \Doctrine\ORM\OptimisticLockException
-   */
-  private function pushTweetArray(array $tweetArray)
-  {
-    $entityManager = &$this->entityManager;
-    foreach ($tweetArray as $tweet) {
-      $entityManager->persist($tweet);
-    }
-    $entityManager->flush();
-  }
-
-  /**
+   * Fetch, parse, and insert tweets into DB.
+   * Our persistence algorithm makes use of two inserts.
    * @param String $accountName
    * @param int $tweetsWanted
    * @return int
@@ -58,12 +45,12 @@ class DataPersist
   public function fetchAndPersistTweets(String $accountName, int $tweetsWanted)
   {
     // todo: Fix name schemes here. They're bad.
-    $dbTweetsFound = $this->tweetsExistInDbForAccount($accountName);
-    $tweetsPersisted = $this->pushPossibleTweets($accountName, $tweetsWanted, $dbTweetsFound);
+    $dbTweetsFound = $this->dbHasTweets($accountName);
+    $tweetsPersisted = $this->fetchParseAndForceInsertTweets($accountName, $tweetsWanted, $dbTweetsFound);
 
-    $dbTweetsAvailable = $this->dbHasSufficientTweets($accountName, $tweetsWanted);
-    if ($dbTweetsFound && $dbTweetsAvailable < 0) {
-      $tweetsPersisted += $this->pushPossibleTweets($accountName, abs($dbTweetsAvailable), $dbTweetsFound, true);
+    $dbNumberTweetsAvailable = $this->dbHasSufficientTweets($accountName, $tweetsWanted);
+    if ($dbTweetsFound && $dbNumberTweetsAvailable < 0) {
+      $tweetsPersisted += $this->fetchParseAndForceInsertTweets($accountName, abs($dbNumberTweetsAvailable), $dbTweetsFound, true);
     }
 
     return $tweetsPersisted;
@@ -78,7 +65,7 @@ class DataPersist
    * @param bool $fillFromBack
    * @return int
    */
-  private function pushPossibleTweets(String $accountName, int $tweetsToFetch, bool $fillFromFront= false, bool $fillFromBack = false)
+  private function fetchParseAndForceInsertTweets(String $accountName, int $tweetsToFetch, bool $fillFromFront= false, bool $fillFromBack = false)
   {
     $dataFetcher = &$this->dataFetcher;
     $dataParser = &$this->dataParser;
@@ -106,7 +93,7 @@ class DataPersist
 
       $pushedArray = $this->pushAndIgnoreConflicts($tweetArray);
       if (count($pushedArray) == 0 ||
-          (mb_strlen($link) <= 0 && !$firstPage)) {
+        (mb_strlen($link) <= 0 && !$firstPage)) {
         // End of parsing.
         break;
       }
@@ -120,22 +107,29 @@ class DataPersist
   }
 
   /**
-   * @param String $accountName
-   * @return bool
+   * Persists some subset of $tweetArray to DB.
+   * Terminate on successful push; otherwise, continue filtering erroneous tweets until empty.
+   * @param array $tweetArray
+   * @return array
    */
-  private function tweetsExistInDbForAccount(String $accountName)
+  private function pushAndIgnoreConflicts(array $tweetArray)
   {
-    $entityManager = $this->entityManager;
+    $entityManager = &$this->entityManager;
 
-    $qb = $entityManager->createQueryBuilder();
-    $qb->select('count(t)')
-      ->from('Tweet', 't')
-      ->where("t.author = '$accountName'");
+    while (count($tweetArray) != 0) {
+      try {
+        $this->dbInsertTweetArray($tweetArray);
+        break;
+      } catch (Exception $e) {
+        $offendingTweetId = ErrorParser::parseDuplicateMessageForTweetId($e->getMessage());
 
-    $query = $qb->getQuery();
+        $tweetArray = ErrorParser::filterOutOffendingTweet($tweetArray, $offendingTweetId);
 
-    $result = $query->getScalarResult()[0][1];
-    return $result > 0;
+        $entityManager = $this->reopenEntityManager();
+      }
+    }
+
+    return $tweetArray;
   }
 
   /**
@@ -182,6 +176,40 @@ class DataPersist
   }
 
   /**
+   * Attempt to insert an array of Tweet entities.
+   * @param array $tweetArray
+   * @throws \Doctrine\ORM\ORMException
+   * @throws \Doctrine\ORM\OptimisticLockException
+   */
+  private function dbInsertTweetArray(array $tweetArray)
+  {
+    $entityManager = &$this->entityManager;
+    foreach ($tweetArray as $tweet) {
+      $entityManager->persist($tweet);
+    }
+    $entityManager->flush();
+  }
+
+  /**
+   * @param String $accountName
+   * @return bool
+   */
+  private function dbHasTweets(String $accountName)
+  {
+    $entityManager = $this->entityManager;
+
+    $qb = $entityManager->createQueryBuilder();
+    $qb->select('count(t)')
+      ->from('Tweet', 't')
+      ->where("t.author = '$accountName'");
+
+    $query = $qb->getQuery();
+
+    $result = $query->getScalarResult()[0][1];
+    return $result > 0;
+  }
+
+  /**
    * Returns difference between tweetsWanted and tweetsInDb.
    * Insufficient tweets: [-inf, 0)
    * sufficient tweets: [0, inf]
@@ -206,32 +234,6 @@ class DataPersist
     $tweetsInDb = $query->getScalarResult()[0][1];
 
     return $tweetsInDb - $tweetsWanted;
-  }
-
-  /**
-   * Persists some subset of $tweetArray to DB.
-   * Terminate on successful push; otherwise, continue filtering erroneous tweets until empty.
-   * @param array $tweetArray
-   * @return array
-   */
-  private function pushAndIgnoreConflicts(array $tweetArray)
-  {
-    $entityManager = &$this->entityManager;
-
-    while (count($tweetArray) != 0) {
-      try {
-        $this->pushTweetArray($tweetArray);
-        break;
-      } catch (Exception $e) {
-        $offendingTweetId = ErrorParser::parseDuplicateMessageForTweetId($e->getMessage());
-
-        $tweetArray = ErrorParser::filterOutOffendingTweet($tweetArray, $offendingTweetId);
-
-        $entityManager = $this->reopenEntityManager();
-      }
-    }
-
-    return $tweetArray;
   }
 
   /**

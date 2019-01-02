@@ -17,20 +17,6 @@ class Logger
     fwrite($this->file, "\n");
   }
 
-  public function log($msg)
-  {
-    $file = &$this->file;
-    try {
-      $timeStamp = new DateTime();
-      $timeStr = $timeStamp->format("Y-m-d H:i:s");
-      $timeStr .= ":  ";
-    } catch (Exception $e) {
-      $timeStr = "";
-    }
-
-    fwrite($file, $timeStr . $msg . "\n");
-  }
-
   public static function logIfDebugging($msg)
   {
     if (!is_null($GLOBALS['debug_logger'])) {
@@ -42,5 +28,19 @@ class Logger
   {
     $file = &$this->file;
     fclose($file);
+  }
+
+  private function log($msg)
+  {
+    $file = &$this->file;
+    try {
+      $timeStamp = new DateTime();
+      $timeStr = $timeStamp->format("Y-m-d H:i:s");
+      $timeStr .= ":  ";
+    } catch (Exception $e) {
+      $timeStr = "";
+    }
+
+    fwrite($file, $timeStr . $msg . "\n");
   }
 }
