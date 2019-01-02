@@ -7,6 +7,7 @@ X - remove redundant code.
 X - fill in phpdocs of all functions
 X - fix date and time stamps not working properly.
 X - add parseException throws in parser.
+- namespace code
 - start drawing out abstraction/class_diagram of our code.
 - fix up name schemes to be more uniform based on layering.
 - add highlighted text imports.
