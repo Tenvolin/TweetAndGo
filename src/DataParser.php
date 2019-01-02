@@ -7,7 +7,6 @@
  */
 use DiDom\Document;
 // todo: implement exceptions for calling parsing without loading htmlStr.
-// returns array or strings.
 class DataParser
 {
   private $document;
@@ -23,9 +22,9 @@ class DataParser
   /**
    * purpose: Instantiate DOM object and find canonical link.
    * Always call this method before parsing.
-   * @param $htmlStr
+   * @param String $htmlStr
    */
-  public function loadHtmlStr($htmlStr)
+  public function loadHtmlStr(String $htmlStr)
   {
     $this->document->loadHtml($htmlStr);
 
@@ -44,8 +43,7 @@ class DataParser
   /**
    * Parse contents of mobile twitter account page.
    * Returns an array of tweets, where every tweet can contain n features.
-   * Features: tweetText, timestamp.
-   * @return Tweet[];
+   * @return array
    */
   public function parseTweetsAndFeatures()
   {
@@ -71,6 +69,10 @@ class DataParser
   return $tweetArray;
   }
 
+  /**
+   * Parse and return absolute link from current html doc.
+   * @return string
+   */
   public function parseNextPageLink()
   {
     $document = $this->document;
@@ -85,26 +87,28 @@ class DataParser
 
     $eNextButton = $results[0];
 
-    // Parse restEndpoint in order to CURL next page of tweets.
+    // CURL next page of tweets.
     $relativeNextPageLink = trim($eNextButton->getAttribute('href'));
     $restEndpointStart = mb_strpos($relativeNextPageLink , '?');
     $restEndpointStr = mb_substr($relativeNextPageLink , $restEndpointStart);
 
-    // set up next mobile twitter link
+    // Format
     $absoluteNextPageLink = $this->canonicalLink . $restEndpointStr;
     $mobileAbsoluteNextPageLink = mb_ereg_replace('//', '//mobile.', $absoluteNextPageLink);
+    if ($mobileAbsoluteNextPageLink === false) {
+      return '';
+    }
 
     Logger::logIfDebugging($mobileAbsoluteNextPageLink);
     return $mobileAbsoluteNextPageLink;
   }
-
 
   /**
    * Given a table node, extract tweet message.
    * @param $tweetTableNode
    * @return string
    */
-  private function parseTweetMessage($tweetTableNode)
+  private function parseTweetMessage(DiDom\Element $tweetTableNode)
   {
     $result = $tweetTableNode->find("div.tweet-text");
     if (count($result) <= 0) {
@@ -122,7 +126,7 @@ class DataParser
    * @param $tweetTableNode
    * @return string
    */
-  private static function parseContainerTimestamp($tweetTableNode)
+  private static function parseContainerTimestamp(DiDom\Element $tweetTableNode)
   {
     $result = $tweetTableNode->find("td.timestamp");
     if (count($result) <= 0) {
@@ -135,10 +139,10 @@ class DataParser
   }
 
   /**
-   * @param $tweetTableNode
+   * @param \DiDom\Element $tweetTableNode
    * @return string
    */
-  private function parseTweetId($tweetTableNode)
+  private function parseTweetId(\DiDom\Element $tweetTableNode)
   {
     $resultStr = $tweetTableNode->getAttribute('href');
     if (mb_strlen($resultStr) <= 0) {
@@ -147,9 +151,7 @@ class DataParser
 
     $tweetId = trim($resultStr);
     $tweetId = preg_replace("/[^0-9]/", '', $tweetId);
-
-    if (is_null($tweetId) || is_array($tweetId))
-    {
+    if (is_null($tweetId) || is_array($tweetId)) {
       return '';
     }
 
@@ -157,10 +159,10 @@ class DataParser
   }
 
   /**
-   * @param $document
+   * @param Document $document
    * @return string
    */
-  private function parseAuthor($document)
+  private function parseAuthor(Document $document)
   {
     $result = $document->find("div.profile .screen-name");
     if (count($result) <= 0) {
@@ -171,31 +173,31 @@ class DataParser
 
     $author = trim($eAuthor->text());
 
-    if (is_null($author))
-    {
+    if (is_null($author)) {
       return '';
     }
 
     return $author;
   }
 
-
+  /**
+   * @param \DiDom\Element $tweetTableNode
+   * @return int
+   */
   private function parseTweetType(DiDom\Element $tweetTableNode)
   {
     // todo: Consider how to throw exception here.
     $result = $tweetTableNode->find("span.context");
-    if (count($result) <= 0)
+    if (count($result) <= 0) {
       return 0;
-
+    }
 
     $eSpan = $result[0];
-
-    // retweet
     $searchIndex = mb_stripos($eSpan->text(), "retweet", 0, 'UTF-8') ;
-    if ($searchIndex >= 0)
+    if ($searchIndex >= 0) {
       return 1;
+    }
 
-    // No type found
     throw new ParseException("No tweet type found.");
   }
 }

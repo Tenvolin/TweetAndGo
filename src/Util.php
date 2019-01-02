@@ -79,33 +79,6 @@ class Util {
   }
 
   /**
-   * Invariant: input string is trimmed
-   * Returns a value
-   * @param $abbreviatedDate string
-   * @return int
-   */
-  private static function findTimeFormat($abbreviatedDate)
-  {
-    $case = 0;
-    $charsArray = preg_split('//u', $abbreviatedDate, null, PREG_SPLIT_NO_EMPTY);
-    $lastIndex = count($charsArray) - 1;
-
-    if (mb_strlen($abbreviatedDate) <= 3 && $charsArray[$lastIndex] == 'h') {
-      $case = self::TIME_FORMAT_WITHIN_HOURS;
-    } else if (mb_strlen($abbreviatedDate) === 3 && $charsArray[$lastIndex] == 'm') {
-      $case = self::TIME_FORMAT_WITHIN_MINUTES;
-    } else if (mb_strlen($abbreviatedDate) === 3 && $charsArray[$lastIndex] == 's') {
-      $case = self::TIME_FORMAT_WITHIN_SECONDS;
-    } else if (mb_strlen($abbreviatedDate) <= 6) {
-      $case = self::TIME_FORMAT_WITHIN_MONTH;
-    } else if (mb_strlen($abbreviatedDate) <= 10) {
-      $case = self::TIME_FORMAT_BEYOND_YEAR;
-    }
-
-    return $case;
-  }
-
-  /**
    * Continually prompt user for input until some possible username found.
    * @return string
    */
@@ -200,6 +173,33 @@ class Util {
     }
 
     return false;
+  }
+
+  /**
+   * Invariant: input string is trimmed
+   * Returns a value
+   * @param $abbreviatedDate string
+   * @return int
+   */
+  private static function findTimeFormat($abbreviatedDate)
+  {
+    $case = 0;
+    $charsArray = preg_split('//u', $abbreviatedDate, null, PREG_SPLIT_NO_EMPTY);
+    $lastIndex = count($charsArray) - 1;
+
+    if (mb_strlen($abbreviatedDate) <= 3 && $charsArray[$lastIndex] == 'h') {
+      $case = self::TIME_FORMAT_WITHIN_HOURS;
+    } else if (mb_strlen($abbreviatedDate) === 3 && $charsArray[$lastIndex] == 'm') {
+      $case = self::TIME_FORMAT_WITHIN_MINUTES;
+    } else if (mb_strlen($abbreviatedDate) === 3 && $charsArray[$lastIndex] == 's') {
+      $case = self::TIME_FORMAT_WITHIN_SECONDS;
+    } else if (mb_strlen($abbreviatedDate) <= 6) {
+      $case = self::TIME_FORMAT_WITHIN_MONTH;
+    } else if (mb_strlen($abbreviatedDate) <= 10) {
+      $case = self::TIME_FORMAT_BEYOND_YEAR;
+    }
+
+    return $case;
   }
 }
 

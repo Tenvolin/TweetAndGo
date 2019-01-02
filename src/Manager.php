@@ -36,7 +36,7 @@ if (count($argv) > 1) {
 // Determine query options
 if ($isDebugging) {
   $accountName = "jaredpar"; // miraieu, realDonaldTrump, ladygaga, selenagomez, taylorswift13
-  $tweetCount = 20;
+  $tweetCount = 25;
 } else {
   $accountName = Util::promptForValidUsername();
   $tweetCount = Util::promptForValidTweetCount();
@@ -47,6 +47,5 @@ $debug_logger = new Logger();
 //   public static function fetchAndPersistTweets($accountName, $tweetCount, $entityManager, $conn, $config) {
 $dataPusher = new DataPersist($entityManager, $conn, $config);
 $dataPusher->fetchAndPersistTweets($accountName, $tweetCount);
-
 
 $debug_logger->close();

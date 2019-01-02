@@ -23,12 +23,14 @@ class Tweet
   /** @Column(type="datetime") **/
   protected $date;
   /** @Column(type="integer"), options={"unsigned":true} **/
+
+  // ==== Types
   // 0: regular
   // 1: retweet
   protected $type;
 
 
-  public function __construct($author, $tweetId, $message, $date, $type)
+  public function __construct(String $author, String $tweetId, String $message, DateTime $date, int $type)
   {
     $this->author = $author;
     $this->tweetId = $tweetId;
@@ -38,7 +40,7 @@ class Tweet
   }
 
   /**
-   * @return mixed
+   * @return String
    */
   public function getTweetId()
   {
@@ -46,7 +48,7 @@ class Tweet
   }
 
   /**
-   * @param mixed $tweetId
+   * @param $tweetId
    */
   public function setTweetId($tweetId): void
   {
@@ -54,7 +56,7 @@ class Tweet
   }
 
   /**
-   * @return mixed
+   * @return String
    */
   public function getAuthor()
   {
@@ -62,7 +64,7 @@ class Tweet
   }
 
   /**
-   * @param mixed $author
+   * @param $author
    */
   public function setAuthor($author): void
   {
@@ -70,7 +72,7 @@ class Tweet
   }
 
   /**
-   * @return mixed
+   * @return DateTime
    */
   public function getDate()
   {
@@ -78,23 +80,32 @@ class Tweet
   }
 
   /**
-   * @param mixed $date
+   * @param $date
    */
   public function setDate($date)
   {
     $this->date = $date;
   }
 
+  /**
+   * @return String
+   */
   public function getMessage()
   {
     return $this->message;
   }
 
+  /**
+   * @param $msg
+   */
   public function setMessage($msg)
   {
     $this->message = $msg;
   }
 
+  /**
+   * @return mixed
+   */
   public function getId() {
     return $this->id;
   }

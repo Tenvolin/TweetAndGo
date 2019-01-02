@@ -8,13 +8,15 @@
 
 class ErrorParser
 {
-//  An exception occurred while executing 'INSERT INTO tweets (author, tweetId, message, date) VALUES (?, ?, ?, ?)'
-// with params ["realDonaldTrump", "1079214392758145024", "\u201cIt turns out to be true now, that the Department of
-// Justice and the FBI, under President Obama, rigged the investigation for Hillary and really turned the screws on
-// Trump, and now it looks like in a corrupt & illegal way. The facts are out now. Whole Hoax exposed. @JesseBWatters",
-// "2018-12-30 03:18:56"]:
-//
-// SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '1079214392758145024' for key 'UNIQ_AA384025F6DA78B2'
+  // ==== Example of an error encountered START.
+  // An exception occurred while executing 'INSERT INTO tweets (author, tweetId, message, date) VALUES (?, ?, ?, ?)'
+  // with params ["realDonaldTrump", "1079214392758145024", "\u201cIt turns out to be true now, that the Department of
+  // Justice and the FBI, under President Obama, rigged the investigation for Hillary and really turned the screws on
+  // Trump, and now it looks like in a corrupt & illegal way. The facts are out now. Whole Hoax exposed. @JesseBWatters",
+  // "2018-12-30 03:18:56"]:
+  //
+  // SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '1079214392758145024' for key 'UNIQ_AA384025F6DA78B2'
+  // ==== Example of an error encountered END.
   static function parseDuplicateMessageForTweetId(String $msg)
   {
     // params \[.*]
@@ -30,21 +32,9 @@ class ErrorParser
                           'UTF-8');
 
     $splitArr = preg_split("/[,]+/", $strToSplit);
-    $tweetId = $splitArr[1];
+    $tweetId = $splitArr[1]; // todo: fix, make robust.
     $tweetId = trim(preg_replace('/"*/', '', $tweetId));
     return $tweetId;
-  }
-
-  private static function parseTweetIdFromSplitResult($splitArr)
-  {
-    $result = [];
-    foreach ($splitArr as $str) {
-      $intCheck = preg_match("/[\d+]/", $str, $result);
-      if ($intCheck == 1) {
-        return ;
-      }
-    }
-    return "";
   }
 
   public static function filterOutOffendingTweet($tweets, $tweetId)
@@ -55,11 +45,6 @@ class ErrorParser
                 });
 
     return $results;
-  }
-
-  private static function containsTweetId(Tweet $tweet, String $tweetId)
-  {
-    return ($tweet->getTweetId() === $tweetId);
   }
 
 }

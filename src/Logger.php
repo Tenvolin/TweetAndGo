@@ -10,11 +10,13 @@ class Logger
 {
   private $path = './';
   private $file;
+
   public function __construct()
   {
     $this->file = fopen('log.txt', 'a');
     fwrite($this->file, "\n");
   }
+
   public function log($msg)
   {
     $file = &$this->file;
@@ -26,7 +28,6 @@ class Logger
       $timeStr = "";
     }
 
-
     fwrite($file, $timeStr . $msg . "\n");
   }
 
@@ -36,7 +37,6 @@ class Logger
       $GLOBALS['debug_logger']->log($msg);
     }
   }
-
 
   public function close()
   {

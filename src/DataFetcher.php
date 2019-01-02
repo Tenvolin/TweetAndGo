@@ -33,7 +33,7 @@ class DataFetcher
    * @param string $link
    * @return string
    */
-  public function delayedFetch($accountName, $link = "")
+  public function delayedFetch(String $accountName, String $link = "")
   {
     // todo: refactor to not loop back on first page;
     //  Currently, on the last page, we're parsing the home page all over and filtering again.

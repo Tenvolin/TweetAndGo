@@ -19,6 +19,12 @@ class DataPersist
   // The max tweet limit is limited by Twitter's API themselves; pagination terminates.
   static $MAX_TWEET_LIMIT = 3300;
 
+  /**
+   * DataPersist constructor.
+   * @param EntityManager $entityManager
+   * @param array $conn
+   * @param \Doctrine\ORM\Configuration $config
+   */
   public function __construct(EntityManager $entityManager, array $conn, \Doctrine\ORM\Configuration $config)
   {
     $this->entityManager = $entityManager;
@@ -30,10 +36,12 @@ class DataPersist
   }
 
   /**
-   * @param $tweetArray
-   * @throws Exception
+   * Attempt to insert an array of Tweet entities.
+   * @param array $tweetArray
+   * @throws \Doctrine\ORM\ORMException
+   * @throws \Doctrine\ORM\OptimisticLockException
    */
-  private function pushTweetArray($tweetArray)
+  private function pushTweetArray(array $tweetArray)
   {
     $entityManager = &$this->entityManager;
     foreach ($tweetArray as $tweet) {
@@ -42,8 +50,12 @@ class DataPersist
     $entityManager->flush();
   }
 
-
-  public function fetchAndPersistTweets($accountName, $tweetsWanted)
+  /**
+   * @param String $accountName
+   * @param int $tweetsWanted
+   * @return int
+   */
+  public function fetchAndPersistTweets(String $accountName, int $tweetsWanted)
   {
     // todo: Fix name schemes here. They're bad.
     $dbTweetsFound = $this->tweetsExistInDbForAccount($accountName);
@@ -66,7 +78,7 @@ class DataPersist
    * @param bool $fillFromBack
    * @return int
    */
-  private function pushPossibleTweets($accountName, $tweetsToFetch, $fillFromFront= false, $fillFromBack = false)
+  private function pushPossibleTweets(String $accountName, int $tweetsToFetch, bool $fillFromFront= false, bool $fillFromBack = false)
   {
     $dataFetcher = &$this->dataFetcher;
     $dataParser = &$this->dataParser;
@@ -107,45 +119,10 @@ class DataPersist
     return $fetchCount;
   }
 
-
   /**
-   * Should an exception be encountered, the last page of tweets parsed will not
-   * be persisted to DB. Thus, we must manually confirm if any of this last page
-   * has not been persisted to DB yet.
-   * INVARIANT: The #tweets to persist MUST BE < 20.
-   * @param $accountName
-   * @param $offset
-   * @param $lastPageOfTweets
-   * @return int
+   * @param String $accountName
+   * @return bool
    */
-  private function insertRemainingTweetsFromLastPage($accountName, $offset, $lastPageOfTweets)
-  {
-    $entityManager = $this->entityManager;
-
-    $qb = $entityManager->createQueryBuilder();
-    $qb->select('t')
-      ->from('Tweet', 't')
-      ->where("t.author = '$accountName'")
-      ->orderBy('t.date', 'DESC')
-      ->setFirstResult($offset)
-      ->setMaxResults(self::$TWEET_BATCH);
-    $query = $qb->getQuery();
-
-    $result = $query->getResult();
-    $filteredResults = Util::filterExclusiveTweets($lastPageOfTweets, $result);
-
-    try {
-      $this->pushTweetArray($filteredResults);
-    } catch (Exception $e) {
-      // terminate program,
-      throw new RuntimeException("Unable to insert filtered exclusive tweets;
-    something in persistence logic probably went wrong.");
-    }
-
-    // return tweetsToFetchRemaining;
-    return count($filteredResults);
-  }
-
   private function tweetsExistInDbForAccount(String $accountName)
   {
     $entityManager = $this->entityManager;
@@ -161,7 +138,11 @@ class DataPersist
     return $result > 0;
   }
 
-  // LOGIC: provides a link that can be used to fetch tweets. These tweets will contain the last tweet itself.
+  /**
+   * Provides a link that can be used to fetch tweets. These tweets will contain the last tweet itself.
+   * @param String $accountName
+   * @return string
+   */
   private function getNextPageLinkFromLastTweet(String $accountName)
   {
     $entityManager = $this->entityManager;
@@ -229,6 +210,7 @@ class DataPersist
 
   /**
    * Persists some subset of $tweetArray to DB.
+   * Terminate on successful push; otherwise, continue filtering erroneous tweets until empty.
    * @param array $tweetArray
    * @return array
    */
@@ -236,7 +218,6 @@ class DataPersist
   {
     $entityManager = &$this->entityManager;
 
-    // Terminate on successful push; otherwise, continue filtering erroneous tweets until empty.
     while (count($tweetArray) != 0) {
       try {
         $this->pushTweetArray($tweetArray);
@@ -253,6 +234,10 @@ class DataPersist
     return $tweetArray;
   }
 
+  /**
+   * Doctrine ORM closes the EntityManager on failure; reopening is necessary.
+   * @return EntityManager
+   */
   private function reopenEntityManager()
   {
     $entityManager = &$this->entityManager;
