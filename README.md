@@ -1,6 +1,7 @@
 # TweetAndGo
 - A tweet archiver that circumvents using Twitter's dedicated API. 
-Features
+
+#Features
 - avoids spamming HTTP requests with randomized delays.
 - uses Doctrine ORM to facilitate database interactions. 
 
