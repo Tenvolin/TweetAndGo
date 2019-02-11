@@ -17,7 +17,7 @@ class ErrorParser
   //
   // SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '1079214392758145024' for key 'UNIQ_AA384025F6DA78B2'
   // ==== Example of an error encountered END.
-  static function parseDuplicateMessageForTweetId(String $msg)
+  public static function parseDuplicateMessageForTweetId(String $msg)
   {
     // params \[.*]
     mb_regex_encoding('UTF-8');
@@ -27,9 +27,9 @@ class ErrorParser
     $preggedStr = $results[0];
 
     $strToSplit = mb_substr($preggedStr,
-                          1,
-                          mb_strlen($preggedStr, 'UTF-8')-2,
-                          'UTF-8');
+      1,
+      mb_strlen($preggedStr, 'UTF-8')-2,
+      'UTF-8');
 
     $splitArr = preg_split("/[,]+/", $strToSplit);
     $tweetId = $splitArr[1]; // todo: fix, make robust.
@@ -40,9 +40,9 @@ class ErrorParser
   public static function filterOutOffendingTweet($tweets, $tweetId)
   {
     $results =  array_filter($tweets,
-                function(Tweet $tweet) use($tweetId) {
-                  return $tweet->getTweetId() != $tweetId;
-                });
+      function(Tweet $tweet) use($tweetId) {
+        return $tweet->getTweetId() != $tweetId;
+      });
 
     return $results;
   }

@@ -3,14 +3,15 @@ X - implement parsing of tweet type; distinguish between regular and retweet.
 X - implement logging.
 X - fix the crash we have.
 X - implement parse from back;
-X - remove redundant code.
-X - fill in phpdocs of all functions
-X - fix date and time stamps not working properly.
-X - add parseException throws in parser.
-- namespace code
+  i.e. parse with offset.
+- remove redundant code.
+- fill in phpdocs of all functions
 - start drawing out abstraction/class_diagram of our code.
+- fix date and time stamps not working properly.
 - fix up name schemes to be more uniform based on layering.
 - add highlighted text imports.
+- add parseException throws in parser.
 - move code to a server.
 - Attempt to deploy code to droplet.
-blablah
+- dates are still messed up.
+- persist from the last value.

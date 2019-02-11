@@ -47,26 +47,25 @@ class DataParser
    */
   public function parseTweetsAndFeatures()
   {
-  // Parse out all tables
-  $document = $this->document;
-  $tables = $document->find("table.tweet"); // todo: refactor this and other find-calls to throw exception
-  $author = $this->parseAuthor($document);
+    // Parse out all tables
+    $document = $this->document;
+    $tables = $document->find("table.tweet"); // todo: refactor this and other find-calls to throw exception
+    $author = $this->parseAuthor($document);
 
-  // generate an array that contains fields to push into DB.
-  $tweetArray = [];
+    // generate an array that contains fields to push into DB.
+    $tweetArray = [];
 
-  foreach ($tables as $e)
-  {
-    $tweetId = $this->parseTweetId($e);
-    $message = $this->parseTweetMessage($e);
-    // todo; datetime not as accurate as we'd like. Getting 1-day off errors._
-    $timestamp =  Util::convertUnformattedTwitterDateToDateTime($this->parseContainerTimestamp($e));
-    $type = $this->parseTweetType($e);
+    foreach ($tables as $e) {
+      $tweetId = $this->parseTweetId($e);
+      $message = $this->parseTweetMessage($e);
+      // todo; datetime not as accurate as we'd like. Getting 1-day off errors._
+      $timestamp =  Util::convertUnformattedTwitterDateToDateTime($this->parseContainerTimestamp($e));
+      $type = $this->parseTweetType($e);
 
-    $tweet = new Tweet($author, $tweetId, $message, $timestamp, $type);
-    array_push($tweetArray, $tweet);
-  }
-  return $tweetArray;
+      $tweet = new Tweet($author, $tweetId, $message, $timestamp, $type);
+      array_push($tweetArray, $tweet);
+    }
+    return $tweetArray;
   }
 
   /**

@@ -23,7 +23,7 @@ include_once "Logger.php";
 mb_internal_encoding("UTF-8");
 $pagesToFetch = 1;
 
-// Debug
+// Are we debugging?
 var_dump($argv);
 $isDebugging = false;
 if (count($argv) > 1) {
@@ -32,9 +32,9 @@ if (count($argv) > 1) {
     $isDebugging = true;
 }
 
-// Determine query options
+// Determine what account we are querying.
 if ($isDebugging) {
-  $accountName = "jaredpar"; // miraieu, realDonaldTrump, ladygaga, selenagomez, taylorswift13
+  $accountName = "miraieu"; // miraieu, realDonaldTrump, ladygaga, selenagomez, taylorswift13
   $tweetCount = 45;
 } else {
   $accountName = Util::promptForValidUsername();
@@ -42,8 +42,7 @@ if ($isDebugging) {
 }
 $debug_logger = new Logger();
 
-// Fetch enough data to satisfy.
-//   public static function fetchAndPersistTweets($accountName, $tweetCount, $entityManager, $conn, $config) {
+// Fetch enough tweets for current account.
 $dataPusher = new DataPersist($entityManager, $conn, $config);
 $dataPusher->fetchAndPersistTweets($accountName, $tweetCount);
 

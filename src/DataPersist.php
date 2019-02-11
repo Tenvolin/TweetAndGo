@@ -37,17 +37,21 @@ class DataPersist
 
   /**
    * Fetch, parse, and insert tweets into DB.
-   * Our persistence algorithm makes use of two inserts.
+   *
+   * Returns the number of tweets persisted to DB.
+   * Its purpose is to ensure the DB contains the most recent tweets, and that the DB has a sufficient number of tweets.
    * @param String $accountName
    * @param int $tweetsWanted
    * @return int
    */
   public function fetchAndPersistTweets(String $accountName, int $tweetsWanted)
   {
-    // todo: Fix name schemes here. They're bad.
+    // Start fetching tweets, and stop when the first DB_insert collision occurs; stopping means we have updated all
+    //    new tweets for this account.
     $dbTweetsFound = $this->dbHasTweets($accountName);
     $tweetsPersisted = $this->fetchParseAndForceInsertTweets($accountName, $tweetsWanted, $dbTweetsFound);
 
+    // However, insufficient # of tweets exist in the DB. Start fetching tweets from the oldest dated tweet.
     $dbNumberTweetsAvailable = $this->dbHasSufficientTweets($accountName, $tweetsWanted);
     if ($dbTweetsFound && $dbNumberTweetsAvailable < 0) {
       $tweetsPersisted += $this->fetchParseAndForceInsertTweets($accountName, abs($dbNumberTweetsAvailable), $dbTweetsFound, true);
