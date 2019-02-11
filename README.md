@@ -1,5 +1,6 @@
 # TweetAndGo
-- A tweet archiver that circumvents using Twitter's dedicated API. 
+- An archival program to process Twitter tweets with aims to explore semantic analysis and chatbot concepts.
+- Partially circumvented twitter API rate and volume limits to fetch and persist up to 3000 tweets
 
 # Features
 - avoids spamming HTTP requests with randomized delays.
