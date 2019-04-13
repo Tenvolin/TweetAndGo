@@ -145,10 +145,20 @@ class Util {
     return $result;
   }
 
-  // todo: fix. Not proper check.
+  // TODO: function needs renaming: hard to interpret isDifferentMonthSameYear without an arg.
+  // e.g. input: "apr 20", "apr 1"
   public static function isDifferentMonthSameYear(String $date)
   {
-    return mb_strlen($date, 'UTF-8') == 5 || mb_strlen($date, 'UTF-8') == 6;
+    $splitDate = preg_split("/ /", $date);
+
+    // We expect two strings: "april 20"
+    if (count($splitDate) != 2) {
+      return false;
+    }
+
+    // secondary check
+    $day = intval($splitDate[1]);
+    return (is_int($day) && $day <= 31);
   }
 
   public static function isDifferentYear(String $date)

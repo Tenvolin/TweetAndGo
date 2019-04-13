@@ -23,7 +23,6 @@ class ErrorParser
     mb_regex_encoding('UTF-8');
     $results = [];
     preg_match("/\[.*\]/", $msg, $results);
-//    function mb_substr ($str, $start, $length = null, $encoding = null) {}
     $preggedStr = $results[0];
 
     $strToSplit = mb_substr($preggedStr,
@@ -32,7 +31,8 @@ class ErrorParser
       'UTF-8');
 
     $splitArr = preg_split("/[,]+/", $strToSplit);
-    $tweetId = $splitArr[1]; // todo: fix, make robust.
+    $indexForTweetId = 1; // todo: Write Tests for parsing duplicate message errors!
+    $tweetId = $splitArr[$indexForTweetId];
     $tweetId = trim(preg_replace('/"*/', '', $tweetId));
     return $tweetId;
   }

@@ -6,7 +6,6 @@
  * Time: 11:42 PM
  */
 use DiDom\Document;
-// todo: implement exceptions for calling parsing without loading htmlStr.
 class DataParser
 {
   private $document;
@@ -17,8 +16,6 @@ class DataParser
     $this->document = new Document();
   }
 
-  // todo: Extract out a parseCanonicalLink() method; and
-  //  consider creating a factory class for loading up our loadHTMLdoc.
   /**
    * purpose: Instantiate DOM object and find canonical link.
    * Always call this method before parsing.
@@ -41,13 +38,13 @@ class DataParser
   }
 
   /**
-   * Parse contents of mobile twitter account page.
+   * parse contents of mobile twitter account page.
    * Returns an array of tweets, where every tweet can contain n features.
    * @return array
    */
   public function parseTweetsAndFeatures()
   {
-    // Parse out all tables
+    // parse out all tables
     $document = $this->document;
     $tables = $document->find("table.tweet"); // todo: refactor this and other find-calls to throw exception
     $author = $this->parseAuthor($document);
@@ -69,7 +66,7 @@ class DataParser
   }
 
   /**
-   * Parse and return absolute link from current html doc.
+   * parse and return absolute link from current html doc.
    * @return string
    */
   public function parseNextPageLink()
@@ -185,7 +182,6 @@ class DataParser
    */
   private function parseTweetType(DiDom\Element $tweetTableNode)
   {
-    // todo: Consider how to throw exception here.
     $result = $tweetTableNode->find("span.context");
     if (count($result) <= 0) {
       return 0;

@@ -7,17 +7,13 @@
  */
 include_once "../bootstrap.php";
 include_once "DataFetcher.php";
-include_once "DataParser.php";
+include_once "parse/DataParser.php";
 include_once "DataPersist.php";
 include_once "Util.php";
 include_once "model/Tweet.php";
 include_once "ParseException.php";
-include_once "ErrorParser.php";
+include_once "parse/ErrorParser.php";
 include_once "Logger.php";
-
-// todo: set up some unit testing.
-// todo: attempt to detect any memory leaks.
-// todo: ensure you close everything; dataParser and dataFetcher.
 
 // Config and setup
 mb_internal_encoding("UTF-8");
@@ -35,7 +31,7 @@ if (count($argv) > 1) {
 // Determine what account we are querying.
 if ($isDebugging) {
   $accountName = "miraieu"; // miraieu, realDonaldTrump, ladygaga, selenagomez, taylorswift13
-  $tweetCount = 45;
+  $tweetCount = 3000;
 } else {
   $accountName = Util::promptForValidUsername();
   $tweetCount = Util::promptForValidTweetCount();
@@ -46,4 +42,5 @@ $debug_logger = new Logger();
 $dataPusher = new DataPersist($entityManager, $conn, $config);
 $dataPusher->fetchAndPersistTweets($accountName, $tweetCount);
 
+// ensure you close everything; dataParser and dataFetcher.
 $debug_logger->close();
