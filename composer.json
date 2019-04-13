@@ -1,6 +1,16 @@
 {
-    "require": {
-        "imangazaliev/didom": "^1.14",
-        "doctrine/orm": "^2.6"
+  "require": {
+    "imangazaliev/didom": "^1.14",
+    "doctrine/orm": "^2.6"
+  },
+  "autoload": {
+    "psr-4": {
+      "": [
+        "src/",
+        "src/model",
+        "src/parse"
+      ]
     }
+  }
 }
+

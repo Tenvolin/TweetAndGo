@@ -6,14 +6,6 @@
  * Time: 11:40 PM
  */
 include_once "../bootstrap.php";
-include_once "DataFetcher.php";
-include_once "parse/DataParser.php";
-include_once "DataPersist.php";
-include_once "Util.php";
-include_once "model/Tweet.php";
-include_once "ParseException.php";
-include_once "parse/ErrorParser.php";
-include_once "Logger.php";
 
 // Config and setup
 mb_internal_encoding("UTF-8");
