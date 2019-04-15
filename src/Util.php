@@ -91,7 +91,7 @@ class Util {
       $account = readline("Account name: ");
 
       if (mb_strlen($account, "UTF-8") <= 0) {
-        continue;
+        // do nothing
       } else {
         $isValidInput = true;
       }
@@ -113,11 +113,10 @@ class Util {
       $tweetCountStr = readline("Number of tweets to get: ");
       $tweetCount = intVal($tweetCountStr);
 
-      if ($tweetCount == 0) {
-        continue;
+      if ($tweetCount > 0) {
+        $isValidInput = true;
       }
 
-      $isValidInput = true;
     }
 
     return $tweetCount;
