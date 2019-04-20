@@ -18,7 +18,7 @@ class DataFetcher
   function __construct()
   {
     $this->ch = curl_init();
-    $this->certificatePath = "C:/development/php-7.3.0-nts-Win32-VC15-x64/certs/cacert.pem"; // TODO: Figure out what to do with this when deploying.
+    $this->certificatePath = "../cacert.pem"; // TODO: Fix pathing
 
     curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, 1);
     curl_setopt($this->ch, CURLOPT_TIMEOUT, 5);
