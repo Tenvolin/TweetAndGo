@@ -1,4 +1,3 @@
 vendor/**
 .idea/**
-cli-config.php
 /src/log.txt
