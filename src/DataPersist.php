@@ -36,13 +36,22 @@ class DataPersist
   }
 
   /**
-   * Fetch, parse, and insert tweets into DB.
+   * PURPOSE: Fetch, parse, and insert tweets into DB. Its purpose is to ensure the DB contains the most recent tweets,
+   * and that the DB has a sufficient number of tweets.
    *
-   * Returns the number of tweets persisted to DB.
-   * Its purpose is to ensure the DB contains the most recent tweets, and that the DB has a sufficient number of tweets.
+   * This is the entry point for all persistence logic. Persistence implies that a DB INSERT operation occurs.
+   * Tweets are fetched from $accountName, and then inserted in the DB. Tweets are fetched and inserted in batches
+   * (Loading a single page of tweets yields a small number of tweets: ~20.)
+   *
+   * Collisions will occur as we do not allow insertion of duplicate tweets. e.g. Consider persisting 20 tweets, and then
+   * running this function again after the account tweets one more time (totalling 21 tweets); We will fetch the LATEST
+   * 20 tweets, and of these 20 tweets, only 1 will be new. A collision will occur and this subset (one tweet in this example)
+   * of tweets will not be inserted due to the exception thrown by the ORM. To handle this, we will simply filter out offending
+   * tweets as reported by the DBMS and attempt to insert again. Repeat this until all remaining tweets are persisted.
+   *
    * @param String $accountName
    * @param int $tweetsWanted
-   * @return int
+   * @return int The number of tweets persisted to DB.
    */
   public function fetchAndPersistTweets(String $accountName, int $tweetsWanted)
   {
@@ -51,9 +60,9 @@ class DataPersist
     $dbTweetsFound = $this->dbHasTweets($accountName);
     $tweetsPersisted = $this->fetchParseAndForceInsertTweets($accountName, $tweetsWanted, $dbTweetsFound);
 
-    // However, insufficient # of tweets exist in the DB. Start fetching tweets from the oldest dated tweet.
     $dbNumberTweetsAvailable = $this->dbHasSufficientTweets($accountName, $tweetsWanted);
     if ($dbTweetsFound && $dbNumberTweetsAvailable < 0) {
+      // However, insufficient # of tweets exist in the DB. Start fetching tweets from the oldest dated tweet.
       $tweetsPersisted += $this->fetchParseAndForceInsertTweets($accountName, abs($dbNumberTweetsAvailable), $dbTweetsFound, true);
     }
 
