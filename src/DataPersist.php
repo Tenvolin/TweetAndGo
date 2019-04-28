@@ -70,13 +70,13 @@ class DataPersist
   }
 
   /**
-   * Persists some tweets to DB for some account with no pre-existing records in DB.
-   * Returns a count of total possible inserts into DB.
+   * PURPOSE: Persists some tweets to DB for some account with no pre-existing records in DB.
+   *
    * @param $accountName
    * @param $tweetsToFetch
    * @param bool $fillFromFront
    * @param bool $fillFromBack
-   * @return int
+   * @return int A count of total possible inserts into DB.
    */
   private function fetchParseAndForceInsertTweets(String $accountName, int $tweetsToFetch, bool $fillFromFront= false, bool $fillFromBack = false)
   {
@@ -120,8 +120,8 @@ class DataPersist
   }
 
   /**
-   * Persists some subset of $tweetArray to DB.
-   * Terminate on successful push; otherwise, continue filtering erroneous tweets until empty.
+   * PURPOSE: Persists some subset of $tweetArray to DB.
+   * Terminate on successful push; otherwise, continue filtering duplicate tweets until empty.
    * @param array $tweetArray
    * @return array
    */
@@ -146,7 +146,7 @@ class DataPersist
   }
 
   /**
-   * Provides a link that can be used to fetch tweets. These tweets will contain the last tweet itself.
+   * PURPOSE: Provides a link that can be used to fetch tweets. These tweets will contain the last tweet itself.
    * @param String $accountName
    * @return string
    */
@@ -189,7 +189,7 @@ class DataPersist
   }
 
   /**
-   * Attempt to insert an array of Tweet entities.
+   * PURPOSE: Attempt to insert an array of Tweet entities.
    * @param array $tweetArray
    * @throws \Doctrine\ORM\ORMException
    * @throws \Doctrine\ORM\OptimisticLockException
@@ -223,9 +223,9 @@ class DataPersist
   }
 
   /**
-   * Returns difference between tweetsWanted and tweetsInDb.
-   * Insufficient tweets: [-inf, 0)
-   * sufficient tweets: [0, inf]
+   * PURPOSE: Returns difference between tweetsWanted and tweetsInDb.
+   *  Insufficient tweets: [-inf, 0)
+   *  sufficient tweets: [0, inf]
    * @param $accountName
    * @param $tweetsWanted
    * @return int
@@ -250,7 +250,7 @@ class DataPersist
   }
 
   /**
-   * Doctrine ORM closes the EntityManager on failure; reopening is necessary.
+   * PURPOSE: Doctrine ORM closes the EntityManager on failure; reopening is necessary.
    * @return EntityManager
    */
   private function reopenEntityManager()

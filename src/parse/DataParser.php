@@ -17,7 +17,7 @@ class DataParser
   }
 
   /**
-   * purpose: Instantiate DOM object and find canonical link.
+   * PURPOSE: Instantiate DOM object and find canonical link.
    * Always call this method before parsing.
    * @param String $htmlStr
    */
@@ -38,7 +38,7 @@ class DataParser
   }
 
   /**
-   * parse contents of mobile twitter account page.
+   * PURPOSE: parse contents of mobile twitter account page.
    * Returns an array of tweets, where every tweet can contain n features.
    * @return array
    */
@@ -66,7 +66,24 @@ class DataParser
   }
 
   /**
-   * parse and return absolute link from current html doc.
+   * Given a table node, extract tweet message.
+   * @param $tweetTableNode
+   * @return string
+   */
+  private function parseTweetMessage(DiDom\Element $tweetTableNode)
+  {
+    $result = $tweetTableNode->find("div.tweet-text");
+    if (count($result) <= 0) {
+      throw new ParseException("No tweet message found");
+    }
+
+    $eMessage = $result[0];
+    $message = trim($eMessage->text());
+    return $message;
+  }
+
+  /**
+   * PURPOSE: parse and return absolute link from current html doc.
    * @return string
    */
   public function parseNextPageLink()
@@ -100,24 +117,7 @@ class DataParser
   }
 
   /**
-   * Given a table node, extract tweet message.
-   * @param $tweetTableNode
-   * @return string
-   */
-  private function parseTweetMessage(DiDom\Element $tweetTableNode)
-  {
-    $result = $tweetTableNode->find("div.tweet-text");
-    if (count($result) <= 0) {
-      throw new ParseException("No tweet message found");
-    }
-
-    $eMessage = $result[0];
-    $message = trim($eMessage->text());
-    return $message;
-  }
-
-  /**
-   * Given a table node, extract timestamp.
+   * PURPOSE: Given a table node, extract timestamp.
    * todo: feature - pull and make use of link that actually extracts timestamp; this timestamp is not exact.
    * @param $tweetTableNode
    * @return string

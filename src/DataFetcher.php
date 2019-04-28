@@ -26,7 +26,7 @@ class DataFetcher
   }
 
   /**
-   * Gets html data from link or an account's first page of tweets.
+   * PURPOSE: Gets html data from link or an account's first page of tweets.
    * Fetching is delayed for a couple seconds to prevent spamming.
    * INVARIANT: $link is empty or the next page link of an account.
    * @param $accountName

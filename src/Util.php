@@ -17,8 +17,8 @@ class Util {
   const TIME_FORMAT_BEYOND_YEAR = 5;
 
   /**
-   * Timestamps of tweets are not consistently formatted. They take five possible variations and thus need to be converted
-   * to a DateTime object before persistence.
+   * PURPOSE: Timestamps of tweets are not consistently formatted. They take five possible variations and thus need to be
+   * converted to a DateTime object before persistence.
    * @param $abbreviatedDate
    * @return DateTime
    */
@@ -79,7 +79,7 @@ class Util {
   }
 
   /**
-   * Continually prompt user for input until some possible username found.
+   * PURPOSE: Continually prompt user for input until some possible username found.
    * @return string
    */
   public static function promptForValidUsername()
@@ -101,7 +101,7 @@ class Util {
   }
 
   /**
-   * Continually prompt user for input until integer found.
+   * PURPOSE: Continually prompt user for input until integer found.
    * @return int
    */
   public static function promptForValidTweetCount()
