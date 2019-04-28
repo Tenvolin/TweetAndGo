@@ -49,6 +49,11 @@ class DataPersist
    * of tweets will not be inserted due to the exception thrown by the ORM. To handle this, we will simply filter out offending
    * tweets as reported by the DBMS and attempt to insert again. Repeat this until all remaining tweets are persisted.
    *
+   * NOTE: Certain DBMS's allow for partial insertions where there are duplicates for a set of data (Not always implemented).
+   * However, ORMs are designed to be as general as possible, and does not allow us to "insert" only a subset of tweet entities
+   * that do not collide with existing tweets in the DB. As a result, we are forced to make use of exceptions to filter
+   * offending tweets out of a batch before inserting.
+   *
    * @param String $accountName
    * @param int $tweetsWanted
    * @return int The number of tweets persisted to DB.
