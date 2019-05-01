@@ -1,7 +1,10 @@
 {
   "require": {
     "imangazaliev/didom": "^1.14",
-    "doctrine/orm": "^2.6"
+    "doctrine/orm": "^2.6",
+    "ext-curl": "*",
+    "ext-mbstring": "*",
+    "ext-readline": "*"
   },
   "autoload": {
     "psr-4": {

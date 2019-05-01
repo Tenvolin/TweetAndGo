@@ -23,7 +23,7 @@ if (count($argv) > 1) {
 // Determine what account we are querying.
 if ($isDebugging) {
   $accountName = "miraieu"; // miraieu, realDonaldTrump, ladygaga, selenagomez, taylorswift13
-  $tweetCount = 3000;
+  $tweetCount = 40;
 } else {
   $accountName = Util::promptForValidUsername();
   $tweetCount = Util::promptForValidTweetCount();
