@@ -5,7 +5,7 @@
  * Date: 2018-12-18
  * Time: 11:40 PM
  */
-include_once "../bootstrap.php";
+include_once "../../bootstrap.php";
 
 // Config and setup
 mb_internal_encoding("UTF-8");
