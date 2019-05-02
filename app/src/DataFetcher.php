@@ -1,6 +1,5 @@
 <?php
 
-
 /**
  * Crawler used to fetch all the posts from the user from a certain time. The mobile subdomain of an account is what we
  * want, as it allows for transfer of less data, and provides the ability to scroll through lists of data.
@@ -12,14 +11,12 @@
 class DataFetcher
 {
   private $ch;
-  private $certificatePath;
+  private $certificatePath = "../../cacert.pem"; // TODO: extract out constants.
   private $baseLink = 'https://mobile.twitter.com/';
 
   function __construct()
   {
     $this->ch = curl_init();
-    $this->certificatePath = "../../cacert.pem"; // TODO: Fix pathing
-
     curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, 1);
     curl_setopt($this->ch, CURLOPT_TIMEOUT, 5);
     curl_setopt($this->ch, CURLOPT_CAINFO, $this->certificatePath);
