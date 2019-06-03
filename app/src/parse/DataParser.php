@@ -62,6 +62,9 @@ class DataParser
       $tweet = new Tweet($author, $tweetId, $message, $timestamp, $type);
       array_push($tweetArray, $tweet);
     }
+
+    // ensure the next document we tweet is ready for parsing.
+    $this->document = new Document(); // TODO: Fix this unwanted mutation that we need to reset.
     return $tweetArray;
   }
 
