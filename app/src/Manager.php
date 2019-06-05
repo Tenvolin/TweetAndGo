@@ -25,35 +25,26 @@ $debug_logger = new Logger();
 $targetOneAccount = CSVAccountParser::checkIfTargetOneAccount($argv);
 $targetCSVFileAccounts = CSVAccountParser::checkIfTargetCSV($argv);
 
-
 // perform chosen high level action.
+$dataPusher = new DataPersist($entityManager, $conn, $config);
 if ($targetDebugOneAccount) {
   $accountName = "miraieu"; // miraieu, realDonaldTrump, ladygaga, selenagomez, taylorswift13
   $tweetCount = 40;
-
-  $dataPusher = new DataPersist($entityManager, $conn, $config);
   $dataPusher->fetchAndPersistTweets($accountName, $tweetCount);
 
 } else if ($targetOneAccount) {
   $accountName = CSVAccountParser::parseAccountName($argv);
   $tweetCount = CSVAccountParser::parseTweetCount($argv);
-
-  $dataPusher = new DataPersist($entityManager, $conn, $config);
   $dataPusher->fetchAndPersistTweets($accountName, $tweetCount);
 
 } else if ($targetCSVFileAccounts) {
   $filepath = CSVAccountParser::parseCSVFilepath($argv);
   $tweetCount = CSVAccountParser::parseTweetCount($argv);
   $accountNamesArray = CSVAccountParser::parseAccounts($filepath);
-
-  $dataPusher = new DataPersist($entityManager, $conn, $config);
   foreach ($accountNamesArray as $accountName) {
     $dataPusher->fetchAndPersistTweets($accountName, $tweetCount);
   }
-
 }
 
 // ensure you close everything; dataParser and dataFetcher.
 $debug_logger->close();
-
-
