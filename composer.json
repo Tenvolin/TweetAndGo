@@ -45,8 +45,7 @@
     "autoload": {
         "psr-4": {
             "App\\": [
-                "src/",
-                "src/Entity/"
+                "src/"
             ]
         }
     },
