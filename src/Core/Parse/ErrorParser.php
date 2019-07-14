@@ -1,5 +1,7 @@
 <?php
 namespace App\Core\Parse;
+use Exception;
+use App\Entity\Tweet;
 
 class ErrorParser
 {

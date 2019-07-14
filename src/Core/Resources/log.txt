@@ -1,0 +1,338 @@
+
+
+
+
+2019-04-30 23:51:43:  https://mobile.twitter.com/miraieu?max_id=1116647682070552576
+2019-04-30 23:51:45:  end pushPossibleTweets: 16
+
+
+
+
+
+
+
+
+
+
+
+
+
+2019-05-01 00:05:31:  end pushPossibleTweets: 0
+
+2019-05-01 16:51:04:  https://mobile.twitter.com/miraieu?max_id=1117428724566126591
+2019-05-01 16:51:06:  end pushPossibleTweets: 2
+
+2019-05-01 17:35:05:  end pushPossibleTweets: 0
+
+
+2019-06-02 01:01:12:  https://mobile.twitter.com/miraieu?max_id=1129358709132447743
+2019-06-02 01:01:13:  https://mobile.twitter.com/miraieu?max_id=1123555247098458114
+2019-06-02 01:01:15:  end pushPossibleTweets: 38
+
+
+
+
+
+
+2019-06-03 00:28:26:  https://mobile.twitter.com/miraieu?max_id=1130396300745121791
+2019-06-03 00:28:28:  end pushPossibleTweets: 1
+2019-06-03 00:28:29:  end pushPossibleTweets: 0
+
+2019-06-03 00:29:50:  end pushPossibleTweets: 0
+
+
+
+
+2019-06-03 00:34:16:  end pushPossibleTweets: 0
+2019-06-03 00:34:16:  https://mobile.twitter.com/miraieu?max_id=1130396300745121791
+2019-06-03 00:34:18:  end pushPossibleTweets: 0
+2019-06-03 00:34:18:  https://mobile.twitter.com/miraieu?max_id=1123600003547533311
+2019-06-03 00:34:20:  end pushPossibleTweets: 0
+
+2019-06-03 00:35:12:  end pushPossibleTweets: 0
+2019-06-03 00:35:15:  https://mobile.twitter.com/miraieu?max_id=1130396300745121791
+2019-06-03 00:35:16:  end pushPossibleTweets: 0
+
+2019-06-03 00:37:09:  end pushPossibleTweets: 0
+2019-06-03 00:37:24:  https://mobile.twitter.com/miraieu?max_id=1130396300745121791
+2019-06-03 00:37:25:  end pushPossibleTweets: 0
+
+2019-06-03 00:37:57:  end pushPossibleTweets: 0
+2019-06-03 00:38:02:  https://mobile.twitter.com/miraieu?max_id=1130396300745121791
+2019-06-03 00:38:04:  end pushPossibleTweets: 0
+
+2019-06-03 00:38:16:  end pushPossibleTweets: 0
+2019-06-03 00:39:10:  https://mobile.twitter.com/miraieu?max_id=1130396300745121791
+
+2019-06-03 00:41:29:  end pushPossibleTweets: 0
+
+2019-06-03 00:45:08:  end pushPossibleTweets: 0
+2019-06-03 00:45:22:  end pushPossibleTweets: 20
+2019-06-03 00:45:28:  end pushPossibleTweets: 18
+
+2019-06-03 14:55:09:  end pushPossibleTweets: 1
+2019-06-03 14:55:10:  end pushPossibleTweets: 0
+2019-06-03 14:55:13:  end pushPossibleTweets: 2
+2019-06-03 14:55:17:  end pushPossibleTweets: 20
+
+2019-06-03 15:57:46:  end pushPossibleTweets: 0
+2019-06-03 15:57:47:  end pushPossibleTweets: 0
+2019-06-03 15:57:49:  end pushPossibleTweets: 0
+2019-06-03 15:57:52:  end pushPossibleTweets: 20
+
+2019-06-03 15:59:24:  end pushPossibleTweets: 0
+2019-06-03 15:59:27:  end pushPossibleTweets: 0
+2019-06-03 16:00:05:  end pushPossibleTweets: 0
+2019-06-03 16:00:09:  end pushPossibleTweets: 20
+
+2019-06-03 16:01:02:  end pushPossibleTweets: 0
+2019-06-03 16:01:05:  end pushPossibleTweets: 20
+2019-06-03 16:01:06:  end pushPossibleTweets: 0
+2019-06-03 16:01:07:  end pushPossibleTweets: 0
+
+
+2019-06-03 16:03:42:  end pushPossibleTweets: 0
+2019-06-03 16:03:45:  end pushPossibleTweets: 20
+
+2019-06-03 16:06:53:  end pushPossibleTweets: 0
+
+
+2019-06-03 16:12:52:  end pushPossibleTweets: 0
+2019-06-03 16:12:53:  https://mobile.twitter.com/elonmusk?max_id=1129921205610266623
+2019-06-03 16:12:55:  https://mobile.twitter.com/elonmusk?max_id=1129085209431773184
+2019-06-03 16:12:56:  https://mobile.twitter.com/elonmusk?max_id=1127833290793033727
+2019-06-03 16:12:58:  https://mobile.twitter.com/elonmusk?max_id=1126944861221900287
+2019-06-03 16:12:59:  https://mobile.twitter.com/elonmusk?max_id=1126551583704018950
+2019-06-03 16:13:01:  https://mobile.twitter.com/elonmusk?max_id=1126239063436959744
+2019-06-03 16:13:03:  https://mobile.twitter.com/elonmusk?max_id=1125194069808799743
+2019-06-03 16:13:04:  end pushPossibleTweets: 160
+
+2019-06-03 16:18:48:  https://mobile.twitter.com/elonmusk?max_id=1134539055427833855
+2019-06-03 16:18:50:  https://mobile.twitter.com/elonmusk?max_id=1134013895813713919
+2019-06-03 16:18:52:  end pushPossibleTweets: 9
+
+2019-06-03 16:19:34:  https://mobile.twitter.com/billgates?max_id=1128770048175136767
+2019-06-03 16:19:35:  https://mobile.twitter.com/billgates?max_id=1123625634943635456
+2019-06-03 16:19:37:  https://mobile.twitter.com/billgates?max_id=1117839639782408192
+2019-06-03 16:19:38:  https://mobile.twitter.com/billgates?max_id=1113159049019822079
+2019-06-03 16:19:40:  https://mobile.twitter.com/billgates?max_id=1105903994495479807
+2019-06-03 16:19:41:  https://mobile.twitter.com/billgates?max_id=1098692088105975807
+2019-06-03 16:19:42:  https://mobile.twitter.com/billgates?max_id=1092325423210319871
+2019-06-03 16:19:44:  end pushPossibleTweets: 160
+
+
+2019-06-03 16:21:26:  https://mobile.twitter.com/barackobama?max_id=1120411621304750087
+2019-06-03 16:21:28:  end pushPossibleTweets: 40
+2019-06-03 16:21:29:  end pushPossibleTweets: 0
+2019-06-03 16:21:31:  https://mobile.twitter.com/hillaryclinton?max_id=1133385336820817921
+2019-06-03 16:21:33:  end pushPossibleTweets: 40
+
+2019-06-03 16:22:53:  end pushPossibleTweets: 0
+2019-06-03 16:22:55:  https://mobile.twitter.com/barackobama?max_id=1088863791058698239
+2019-06-03 16:22:56:  https://mobile.twitter.com/barackobama?max_id=1071408513933602815
+2019-06-03 16:22:57:  https://mobile.twitter.com/barackobama?max_id=1058064320356081664
+2019-06-03 16:22:59:  https://mobile.twitter.com/barackobama?max_id=1026481404782235647
+2019-06-03 16:23:00:  https://mobile.twitter.com/barackobama?max_id=975851480648421375
+2019-06-03 16:23:02:  https://mobile.twitter.com/barackobama?max_id=945324527520804865
+2019-06-03 16:23:03:  https://mobile.twitter.com/barackobama?max_id=913952069765271558
+2019-06-03 16:23:05:  https://mobile.twitter.com/barackobama?max_id=870695481290117119
+2019-06-03 16:23:06:  https://mobile.twitter.com/barackobama?max_id=822550300942856192
+2019-06-03 16:23:08:  https://mobile.twitter.com/barackobama?max_id=793152790881112063
+2019-06-03 16:23:09:  https://mobile.twitter.com/barackobama?max_id=790667378023501824
+2019-06-03 16:23:11:  https://mobile.twitter.com/barackobama?max_id=788426999626731520
+2019-06-03 16:23:12:  https://mobile.twitter.com/barackobama?max_id=786264508436058111
+2019-06-03 16:23:14:  end pushPossibleTweets: 279
+2019-06-03 16:23:15:  end pushPossibleTweets: 0
+2019-06-03 16:23:17:  https://mobile.twitter.com/billgates?max_id=1076126897044709376
+2019-06-03 16:23:18:  https://mobile.twitter.com/billgates?max_id=1068242948045893631
+2019-06-03 16:23:20:  https://mobile.twitter.com/billgates?max_id=1058006001088118784
+2019-06-03 16:23:21:  https://mobile.twitter.com/billgates?max_id=1051133214771879937
+2019-06-03 16:23:23:  https://mobile.twitter.com/billgates?max_id=1045062970324254721
+2019-06-03 16:23:24:  https://mobile.twitter.com/billgates?max_id=1041425245176037375
+2019-06-03 16:23:26:  end pushPossibleTweets: 140
+2019-06-03 16:23:27:  end pushPossibleTweets: 0
+2019-06-03 16:23:29:  https://mobile.twitter.com/hillaryclinton?max_id=1126159716533641219
+2019-06-03 16:23:31:  https://mobile.twitter.com/hillaryclinton?max_id=1123637930109603844
+2019-06-03 16:23:32:  https://mobile.twitter.com/hillaryclinton?max_id=1121154484875382783
+2019-06-03 16:23:33:  https://mobile.twitter.com/hillaryclinton?max_id=1118210864652390401
+2019-06-03 16:23:35:  https://mobile.twitter.com/hillaryclinton?max_id=1114705143591780352
+2019-06-03 16:23:36:  https://mobile.twitter.com/hillaryclinton?max_id=1110576558815801344
+2019-06-03 16:23:38:  https://mobile.twitter.com/hillaryclinton?max_id=1108040441394614271
+2019-06-03 16:23:39:  https://mobile.twitter.com/hillaryclinton?max_id=1105572298386522116
+2019-06-03 16:23:41:  https://mobile.twitter.com/hillaryclinton?max_id=1103321244160741375
+2019-06-03 16:23:42:  https://mobile.twitter.com/hillaryclinton?max_id=1100462059676946432
+2019-06-03 16:23:44:  https://mobile.twitter.com/hillaryclinton?max_id=1098315331788001279
+2019-06-03 16:23:45:  https://mobile.twitter.com/hillaryclinton?max_id=1094999549729533958
+2019-06-03 16:23:47:  end pushPossibleTweets: 260
+
+2019-06-03 16:38:04:  end pushPossibleTweets: 0
+2019-06-03 16:38:05:  end pushPossibleTweets: 0
+2019-06-03 16:38:07:  end pushPossibleTweets: 0
+2019-06-03 16:38:08:  end pushPossibleTweets: 0
+
+2019-06-04 16:36:20:  https://mobile.twitter.com/barackobama?max_id=1120411734316023808
+2019-06-04 16:36:22:  end pushPossibleTweets: 1
+2019-06-04 16:36:23:  https://mobile.twitter.com/billgates?max_id=1129104553029251071
+2019-06-04 16:36:25:  end pushPossibleTweets: 1
+2019-06-04 16:36:26:  https://mobile.twitter.com/hillaryclinton?max_id=1133837176964300804
+2019-06-04 16:36:28:  end pushPossibleTweets: 6
+2019-06-04 16:36:29:  https://mobile.twitter.com/miraieu?max_id=1131708218575532031
+2019-06-04 16:36:31:  end pushPossibleTweets: 3
+
+2019-06-04 16:45:21:  end pushPossibleTweets: 0
+2019-06-04 16:45:22:  end pushPossibleTweets: 0
+2019-06-04 16:45:24:  end pushPossibleTweets: 0
+2019-06-04 16:45:25:  https://mobile.twitter.com/billgates?max_id=1029414776735059967
+2019-06-04 16:45:27:  https://mobile.twitter.com/billgates?max_id=1020305951008538623
+2019-06-04 16:45:28:  https://mobile.twitter.com/billgates?max_id=1011752221376036863
+2019-06-04 16:45:30:  https://mobile.twitter.com/billgates?max_id=1004694466748469248
+2019-06-04 16:45:31:  https://mobile.twitter.com/billgates?max_id=997084318982901759
+2019-06-04 16:45:33:  https://mobile.twitter.com/billgates?max_id=989839580605177855
+2019-06-04 16:45:34:  https://mobile.twitter.com/billgates?max_id=985919352879898624
+2019-06-04 16:45:35:  https://mobile.twitter.com/billgates?max_id=981222802635284479
+2019-06-04 16:45:37:  https://mobile.twitter.com/billgates?max_id=972927603542671361
+2019-06-04 16:45:38:  https://mobile.twitter.com/billgates?max_id=965265643716030463
+2019-06-04 16:45:40:  https://mobile.twitter.com/billgates?max_id=954744577964912639
+2019-06-04 16:45:41:  https://mobile.twitter.com/billgates?max_id=943235443885187071
+2019-06-04 16:45:43:  https://mobile.twitter.com/billgates?max_id=937949997433106431
+2019-06-04 16:45:45:  https://mobile.twitter.com/billgates?max_id=930291091277996031
+2019-06-04 16:45:46:  end pushPossibleTweets: 300
+2019-06-04 16:45:48:  end pushPossibleTweets: 0
+2019-06-04 16:45:49:  https://mobile.twitter.com/hillaryclinton?max_id=1086022976305315839
+2019-06-04 16:45:51:  https://mobile.twitter.com/hillaryclinton?max_id=1082661684035104767
+2019-06-04 16:45:52:  https://mobile.twitter.com/hillaryclinton?max_id=1076176795160989695
+2019-06-04 16:45:53:  https://mobile.twitter.com/hillaryclinton?max_id=1071047564630392834
+2019-06-04 16:45:55:  https://mobile.twitter.com/hillaryclinton?max_id=1067419455158931460
+2019-06-04 16:45:56:  https://mobile.twitter.com/hillaryclinton?max_id=1064956970724151296
+2019-06-04 16:45:58:  https://mobile.twitter.com/hillaryclinton?max_id=1062065163451412485
+2019-06-04 16:45:59:  https://mobile.twitter.com/hillaryclinton?max_id=1060221759432126469
+2019-06-04 16:46:01:  https://mobile.twitter.com/hillaryclinton?max_id=1059913914346098693
+2019-06-04 16:46:02:  https://mobile.twitter.com/hillaryclinton?max_id=1058720860209643519
+2019-06-04 16:46:04:  https://mobile.twitter.com/hillaryclinton?max_id=1056961181070643199
+2019-06-04 16:46:05:  https://mobile.twitter.com/hillaryclinton?max_id=1055855641418518528
+2019-06-04 16:46:07:  https://mobile.twitter.com/hillaryclinton?max_id=1055137655300804607
+2019-06-04 16:46:08:  https://mobile.twitter.com/hillaryclinton?max_id=1052988287625953280
+2019-06-04 16:46:10:  end pushPossibleTweets: 300
+2019-06-04 16:46:12:  end pushPossibleTweets: 0
+2019-06-04 16:46:13:  end pushPossibleTweets: 0
+
+2019-06-05 16:29:00:  end pushPossibleTweets: 0
+2019-06-05 16:29:01:  end pushPossibleTweets: 0
+2019-06-05 16:29:03:  https://mobile.twitter.com/billgates?max_id=1129397977963876351
+2019-06-05 16:29:04:  end pushPossibleTweets: 1
+2019-06-05 16:29:06:  https://mobile.twitter.com/hillaryclinton?max_id=1134107325130825728
+2019-06-05 16:29:07:  end pushPossibleTweets: 2
+2019-06-05 16:29:09:  https://mobile.twitter.com/miraieu?max_id=1132270156044853247
+2019-06-05 16:29:12:  end pushPossibleTweets: 1
+2019-06-05 16:29:14:  end pushPossibleTweets: 0
+
+2019-06-05 16:30:08:  end pushPossibleTweets: 0
+2019-06-05 16:30:17:  end pushPossibleTweets: 0
+2019-06-05 16:30:27:  end pushPossibleTweets: 0
+2019-06-05 16:30:31:  end pushPossibleTweets: 0
+2019-06-05 16:30:34:  end pushPossibleTweets: 0
+2019-06-05 16:30:36:  end pushPossibleTweets: 0
+
+2019-06-05 16:31:25:  end pushPossibleTweets: 0
+2019-06-05 16:31:27:  end pushPossibleTweets: 0
+2019-06-05 16:31:29:  end pushPossibleTweets: 0
+2019-06-05 16:31:31:  end pushPossibleTweets: 0
+2019-06-05 16:31:33:  end pushPossibleTweets: 0
+2019-06-05 16:31:35:  end pushPossibleTweets: 0
+
+2019-06-05 17:00:48:  end pushPossibleTweets: 0
+2019-06-05 17:00:50:  end pushPossibleTweets: 0
+2019-06-05 17:00:52:  end pushPossibleTweets: 0
+2019-06-05 17:00:54:  end pushPossibleTweets: 0
+2019-06-05 17:00:56:  end pushPossibleTweets: 0
+2019-06-05 17:00:58:  end pushPossibleTweets: 0
+
+2019-06-05 18:00:56:  end pushPossibleTweets: 0
+2019-06-05 18:00:58:  end pushPossibleTweets: 0
+2019-06-05 18:01:00:  end pushPossibleTweets: 0
+2019-06-05 18:01:02:  end pushPossibleTweets: 0
+2019-06-05 18:01:04:  end pushPossibleTweets: 0
+2019-06-05 18:01:07:  end pushPossibleTweets: 0
+
+2019-06-05 22:08:26:  end pushPossibleTweets: 0
+2019-06-05 22:08:28:  end pushPossibleTweets: 0
+2019-06-05 22:08:30:  end pushPossibleTweets: 0
+2019-06-05 22:08:32:  end pushPossibleTweets: 0
+2019-06-05 22:08:34:  end pushPossibleTweets: 0
+2019-06-05 22:08:37:  end pushPossibleTweets: 0
+
+2019-06-08 16:15:17:  https://mobile.twitter.com/barackobama?max_id=1120411993905799170
+2019-06-08 16:15:19:  end pushPossibleTweets: 2
+2019-06-08 16:15:21:  end pushPossibleTweets: 0
+2019-06-08 16:15:23:  https://mobile.twitter.com/billgates?max_id=1130530501943545855
+2019-06-08 16:15:26:  end pushPossibleTweets: 3
+2019-06-08 16:15:28:  https://mobile.twitter.com/hillaryclinton?max_id=1134180540268077056
+2019-06-08 16:15:30:  end pushPossibleTweets: 2
+2019-06-08 16:15:35:  https://mobile.twitter.com/miraieu?max_id=1132672341601792000
+2019-06-08 16:15:37:  end pushPossibleTweets: 1
+2019-06-08 16:15:39:  end pushPossibleTweets: 0
+
+
+2019-06-08 16:21:30:  end pushPossibleTweets: 0
+2019-06-08 16:21:32:  end pushPossibleTweets: 0
+2019-06-08 16:21:34:  end pushPossibleTweets: 0
+2019-06-08 16:21:36:  end pushPossibleTweets: 0
+2019-06-08 16:21:38:  end pushPossibleTweets: 0
+2019-06-08 16:21:40:  end pushPossibleTweets: 0
+
+2019-06-08 16:21:58:  end pushPossibleTweets: 0
+2019-06-08 16:22:01:  end pushPossibleTweets: 0
+2019-06-08 16:22:03:  end pushPossibleTweets: 0
+2019-06-08 16:22:05:  end pushPossibleTweets: 0
+2019-06-08 16:22:07:  end pushPossibleTweets: 0
+2019-06-08 16:22:09:  end pushPossibleTweets: 0
+
+2019-06-08 16:22:12:  end pushPossibleTweets: 0
+2019-06-08 16:22:14:  end pushPossibleTweets: 0
+2019-06-08 16:22:16:  end pushPossibleTweets: 0
+2019-06-08 16:22:18:  end pushPossibleTweets: 0
+2019-06-08 16:22:21:  end pushPossibleTweets: 0
+2019-06-08 16:22:23:  end pushPossibleTweets: 0
+
+2019-06-08 16:22:26:  end pushPossibleTweets: 0
+2019-06-08 16:22:28:  end pushPossibleTweets: 0
+2019-06-08 16:22:30:  end pushPossibleTweets: 0
+2019-06-08 16:22:33:  end pushPossibleTweets: 0
+2019-06-08 16:22:34:  end pushPossibleTweets: 0
+2019-06-08 16:22:36:  end pushPossibleTweets: 0
+
+2019-06-08 16:41:58:  end pushPossibleTweets: 0
+2019-06-08 16:42:00:  end pushPossibleTweets: 0
+2019-06-08 16:42:02:  end pushPossibleTweets: 0
+2019-06-08 16:42:04:  end pushPossibleTweets: 0
+2019-06-08 16:42:06:  end pushPossibleTweets: 0
+2019-06-08 16:42:08:  end pushPossibleTweets: 0
+
+2019-06-08 16:49:49:  end pushPossibleTweets: 0
+2019-06-08 16:49:51:  end pushPossibleTweets: 0
+2019-06-08 16:49:53:  end pushPossibleTweets: 0
+2019-06-08 16:49:55:  end pushPossibleTweets: 0
+2019-06-08 16:49:57:  end pushPossibleTweets: 0
+2019-06-08 16:49:59:  end pushPossibleTweets: 0
+
+2019-06-09 15:39:00:  end pushPossibleTweets: 0
+2019-06-09 15:39:02:  end pushPossibleTweets: 0
+2019-06-09 15:39:05:  end pushPossibleTweets: 0
+2019-06-09 15:39:07:  end pushPossibleTweets: 0
+2019-06-09 15:39:09:  https://mobile.twitter.com/miraieu?max_id=1132732197134192639
+2019-06-09 15:39:11:  end pushPossibleTweets: 1
+2019-06-09 15:39:13:  end pushPossibleTweets: 0
+
+2019-06-09 16:25:47:  end pushPossibleTweets: 0
+2019-06-09 16:25:50:  end pushPossibleTweets: 0
+2019-06-09 16:25:52:  end pushPossibleTweets: 0
+2019-06-09 16:25:54:  end pushPossibleTweets: 0
+2019-06-09 16:25:56:  end pushPossibleTweets: 0
+2019-06-09 16:25:58:  end pushPossibleTweets: 0
+
+2019-06-09 17:07:12:  end pushPossibleTweets: 0
+2019-06-09 17:07:14:  end pushPossibleTweets: 0
+2019-06-09 17:07:16:  end pushPossibleTweets: 0
+2019-06-09 17:07:18:  end pushPossibleTweets: 0
+2019-06-09 17:07:20:  end pushPossibleTweets: 0
+2019-06-09 17:07:22:  end pushPossibleTweets: 0

@@ -1,6 +1,12 @@
 <?php
 namespace App\Core\Parse;
+use App\Core\Resources\Util;
+use App\Entity\Tweet;
+use DiDom;
+use App\Core\ParseException;
 use DiDom\Document;
+use Exception;
+use App\Core\Logger;
 
 class DataParser
 {
