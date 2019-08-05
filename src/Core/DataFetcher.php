@@ -29,20 +29,23 @@ class DataFetcher
    * INVARIANT: $link is empty or the next page link of an account.
    * @param $accountName
    * @param string $link
+   * @param bool $overrideDelay
    * @return string
    */
-  public function delayedFetch(String $accountName, String $link = "")
+  public function delayedFetch(String $accountName, String $link = "", bool $overrideDelay = false)
   {
-    usleep(rand(1500000, 2000000));
+    if (!$overrideDelay) {
+      usleep(rand(1500000, 2000000));
+    }
 
-    if (mb_strlen($link, "UTF-8") <= 0)
+    if (mb_strlen($link, "UTF-8") <= 0) {
       $link = $this->baseLink . $accountName;
+    }
 
     // Set up fetching configuration
     $ch = $this->ch;
     curl_setopt($ch, CURLOPT_URL, $link);
 
-    // fetch $pagesToFetch page, holding on to all info.
     $result = curl_exec($ch);
     if ($result === false)
       return '';
